@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Best Practices and Tips for Qeo Enabled Apps in C</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Developer-Guide_21676089.html">Qeo Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676132.html">Qeo C (Native) Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Start-Developing-a-Qeo-Enabled-Application-in-C_21676133.html">Start Developing a Qeo Enabled Application in C</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Best Practices and Tips for Qeo Enabled Apps in C
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This section covers the following topics:</p><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1401114962362 {padding: 0px;}
+div.rbtoc1401114962362 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1401114962362 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1401114962362'>
+<ul class='toc-indentation'>
+<li><a href='#BestPracticesandTipsforQeoEnabledAppsinC-AvoidQuickClosureofReadersandWriters'>Avoid Quick Closure of Readers and Writers</a></li>
+<li><a href='#BestPracticesandTipsforQeoEnabledAppsinC-Threadingmodel'>Threading model</a></li>
+<li><a href='#BestPracticesandTipsforQeoEnabledAppsinC-Memoryownership'>Memory ownership</a></li>
+<li><a href='#BestPracticesandTipsforQeoEnabledAppsinC-UsingSequenceTypesinC'>Using Sequence Types in C</a>
+<ul class='toc-indentation'>
+<li><a href='#BestPracticesandTipsforQeoEnabledAppsinC-Definingasequencetype'>Defining a sequence type</a></li>
+<li><a href='#BestPracticesandTipsforQeoEnabledAppsinC-Initializingasequence'>Initializing a sequence</a></li>
+<li><a href='#BestPracticesandTipsforQeoEnabledAppsinC-Sequenceproperties'>Sequence properties</a></li>
+<li><a href='#BestPracticesandTipsforQeoEnabledAppsinC-Gettingandsettingsequenceelements'>Getting and setting sequence elements</a></li>
+</ul>
+</li>
+</ul>
+</div></p><h4 id="BestPracticesandTipsforQeoEnabledAppsinC-AvoidQuickClosureofReadersandWriters">Avoid Quick Closure of Readers and Writers</h4><p>The creation of a Qeo factory, a reader or a writer is an expensive operation. Hence, it is not advisable to create and destroy these entities frequently. Only destroy Qeo readers and writers if you won't be needing them in the near future.</p><p>Another reason why one should avoid quickly closing and recreating readers is that events might be missed. Event readers are guaranteed to receive all events of all discovered event writers on the same Topic. However if you close your event reader and immediately create a new one, there is a small time window (the time needed for creating the new reader and re-discovering all writers) in which events may go lost on you.</p><h4 id="BestPracticesandTipsforQeoEnabledAppsinC-Threadingmodel">Threading model</h4><p>Qeo will spawn its own threads. Callbacks towards the applications MAY run in an application thread (especially when the callback is called at reader creation time) or MAY run in a dedicated Qeo thread. You should not make any assumptions in which thread Qeo callbacks will run. You should also not do any blocking calls in a Qeo callback thread as this will block everything. You should also not close the current reader or close the factory from a Qeo data callback.</p><p>When registering signal handlers, you cannot make any assumptions in which thread those signal handlers are executed.</p><h4 id="BestPracticesandTipsforQeoEnabledAppsinC-Memoryownership">Memory ownership</h4><p>Ownership of memory is never transferred: pointers to memory passed as arguments in a Qeo callback MUST NOT be free()'d by the application. In addition, if you want to retain the information (i.e. the data sample) passed into the callback after the callback finishes, you need to make your own copy.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">static void on_chat_message(const qeo_event_reader_t *reader,
+                            const void *data,
+                            uintptr_t userdata)
+{
+ 	/* data MUST NOT be free()&#39;d here ! */
+} </pre>
+</div></div><p><span style="font-size: 10.0pt;line-height: 13.0pt;">Objects passed to Qeo API calls (e.g. qeo_event_writer_write()) are still owned by the application. Hence it's the application's responsibility to free() it (Qeo will make its own copy of the data).</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">org_qeo_sample_simplechat_ChatMessage_t *chat_msg = calloc(1, sizeof(*chat_msg));
+...
+qeo_event_writer_write(qeo, chat_msg);
+/* chat_msg is still owned by the application: must be free()&#39;d */
+free(chat_msg)</pre>
+</div></div><h4 id="BestPracticesandTipsforQeoEnabledAppsinC-UsingSequenceTypesinC">Using Sequence Types in C</h4><p>Sequence members in your QDM are basically variable-length arrays. In the C language binding, these are translated into DDS sequence types (DDS is Qeo's underlying communication technology). This section describes the C-language API for constructing, manipulating and reading from DDS sequences.</p>    <div class="aui-message warning shadowed information-macro">
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>There is one rule of thumb to keep in mind when working with the sequence API as described below: the API calls in ALL_CAPS (which are implemented as preprocessor macros) operate directly on the sequence. The API calls in lowercase (which are implemented as functions) operate on <em>a pointer</em> to the sequence.</p>
+                    </div>
+    </div>
+<h5 id="BestPracticesandTipsforQeoEnabledAppsinC-Definingasequencetype">Defining a sequence type</h5><p>You typically don't need to define sequence types manually; the code generator does this for you.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">DDS_SEQUENCE(elemtype, seqtypename)</pre>
+</div></div><p><span style="font-size: 10.0pt;line-height: 13.0pt;">defines a sequence type with elements of type elemtype, called seqtypename.</span></p><p>For example:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">DDS_SEQUENCE(int32_t, intsequence_t);
+intsequence_t seq;</pre>
+</div></div><p><span style="font-size: 10.0pt;line-height: 13.0pt;">defines a type called intsequence_t that can hold a variable amount of int32_t elements, and creates one instance of this type, called seq.</span></p><h5 id="BestPracticesandTipsforQeoEnabledAppsinC-Initializingasequence">Initializing a sequence</h5><p>There are two ways to initialize an empty sequence:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">intsequence_t seq = DDS_SEQ_INITIALIZER(int32_t); /* creates an empty sequence */
+intsequence_t seq;
+DDS_SEQ_INIT(seq); /* creates an empty sequence */</pre>
+</div></div><h5 id="BestPracticesandTipsforQeoEnabledAppsinC-Sequenceproperties">Sequence properties</h5><p>A sequence has several properties:</p><ul><li>Its length (the current element count), accessible through DDS_SEQ_LENGTH(seq);</li><li>Its capacity (the size of the buffer allocated for this sequence), accessible through DDS_SEQ_MAXIMUM(seq). The following always holds true: DDS_SEQUENCE_LENGTH(seq) &lt;= DDS_SEQUENCE_MAXIMUM(seq).</li><li>Its element size (the size of a single sequence element), accessible through DDS_SEQ_ELEM_SIZE(seq);</li><li>The owned flag (1 if the application is responsible for cleanup of the sequence, 0 if Qeo is responsible for cleanup), accessible through DDS_SEQ_OWNED(seq).</li></ul><h5 id="BestPracticesandTipsforQeoEnabledAppsinC-Gettingandsettingsequenceelements">Getting and setting sequence elements</h5>    <div class="aui-message warning shadowed information-macro">
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>Sequences, like C arrays, are indexed starting from 0.</p>
+                    </div>
+    </div>
+<p><span style="font-size: 10.0pt;line-height: 13.0pt;">There are several ways to get and set elements in a sequence:</span></p><ul><li>DDS_SEQ_ITEM(seq, i) returns the ith element from the sequence.</li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int32_t thirdval = DDS_SEQ_ITEM(seq, 2);</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">DDS_SEQ_ITEM_PTR(seq, i) returns a <em>pointer</em> to the ith element in the sequence.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int32_t *thirdvalptr = DDS_SEQ_ITEM_PTR(seq, 2);</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">DDS_SEQ_DATA(seq) returns the sequence's element array. This is the actual internal sequence buffer, not a copy!</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int32_t *buffer = DDS_SEQ_DATA(seq);
+buffer[2] = 128;
+assert(128 == DDS_SEQ_ITEM(seq, 2));</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">DDS_SEQ_ITEM_SET(seq, i, val) sets the ith element in the sequence.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">DDS_SEQ_ITEM_SET(seq, 2, 128);</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">dds_seq_replace(seqptr, i, valptr) sets the ith element in the sequence.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int32_t newval = 128;
+dds_seq_replace(&amp;seq, 2, &amp;newval);</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">dds_seq_to_array(seqptr, array, arraylen) copies maximum <em>arraylen</em> elements from the sequence to an array.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int32_t *values = malloc(sizeof(int32_t) * DDS_SEQ_LENGTH(seq));
+dds_seq_to_array(&amp;seq, values, DDS_SEQ_LENGTH(seq)); /* values now holds a copy of the sequence contents */</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">dds_seq_from_array(seqptr, array, arraylen) sets the sequence contents to a <em>copy</em> of the array.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">intsequence_t seq = DDS_SEQ_INITIALIZER(int32_t);
+int32_t initialvalues[] = { 1, 2, 3, 4, 5 };
+dds_seq_from_array(&amp;seq, initialvalues, sizeof(intitialvalues)/sizeof(initialvalues[0]));</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">dds_seq_copy(destseqptr, srcseqptr) copies the contents of one sequence into another.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">intsequence_t destseq = DDS_SEQ_INITIALIZER(int32_t);
+dds_seq_copy(&amp;destseq, &amp;srcseq);
+assert(DDS_SEQ_LENGTH(destseq) == DDS_SEQ_LENGTH(srcseq);
+for (i = 0; i &lt; DDS_SEQ_LENGTH(destseq); ++i)
+	assert(DDS_SEQ_ITEM(destseq, i) == DDS_SEQ_ITEM(srcseq, i));</pre>
+</div></div><p><span style="color: rgb(0,0,0);font-size: 1.1em;font-weight: bold;line-height: normal;">Iterating over sequences</span></p><p>There are several ways to iterate over a sequence's contents:</p><ul><li>DDS_SEQ_FOREACH(seq,i) is a convenience alias for a simple for loop: for (i = 0; i &lt; DDS_SEQ_LENGTH(seq); i++)</li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int index;
+DDS_SEQ_FOREACH(seq, index) {
+	printf(&quot;seq[%d] = %d\n&quot;, index, DDS_SEQ_ITEM(seq, index));
+}</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">DDS_SEQ_FOREACH_ENTRY(seq,i,ptr) augments DDS_SEQ_FOREACH by also giving you a pointer to the sequence element.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int index;
+int32_t *valptr;
+DDS_SEQ_FOREACH_ENTRY(seq, index, valptr) {
+	printf(&quot;seq[%d] = %d\n&quot;, index, *valptr);
+}</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">dds_seq_every(seqptr, iterfunc(void *, void *), cookie) calls <em>iterfunc</em> for every element in the sequence. iterfunc takes two arguments: a pointer to a sequence element, and the cookie you pass as third argument to dds_seq_every.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">static void iterator(void *valptr, void *cookie)
+{
+	int *index = (int *)cookie;
+	int32_t val = *(int32_t *)valptr;
+	printf(&quot;seq[%d] = %d\n&quot;, *index, val);
+	*index += 1;
+}
+int ndx = 0;
+dds_seq_every(&amp;seq, iterator, &amp;ndx);</pre>
+</div></div><p><span style="color: rgb(0,0,0);font-size: 1.1em;font-weight: bold;line-height: normal;">Adding to or removing from a sequence</span></p><ul><li>dds_seq_prepend(seqptr, valptr) inserts an element at the start of the sequence</li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int32_t newval = 42;
+dds_seq_prepend(&amp;seq, &amp;newval);</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">dds_seq_append(seqptr, valptr) inserts an element at the end of the sequence</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int32_t newval = 42;
+dds_seq_append(&amp;seq, &amp;newval);</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">dds_seq_insert(seqptr, i, valptr) inserts an element at position i in the sequence</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int32_t newval = 42;
+dds_seq_insert(&amp;seq, 2, &amp;newval);</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">dds_seq_remove_first(seqptr, valptr) removes the first element from a sequence, optionally returning the removed element via valptr.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int32_t removedval;
+dds_seq_remove_first(&amp;seq, &amp;removedval);</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">dds_seq_remove_last(seqptr, valptr) removes the last element from a sequence, optionally returning the removed element via valptr.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">int32_t removedval;
+dds_seq_remove_last(&amp;seq, &amp;removedval);</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;">dds_seq_remove(seqptr, i, valptr) removes the element at index i from a sequence, optionally returning the removed element via valptr.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">dds_seq_remove(&amp;seq, 2, NULL);</pre>
+</div></div><p><span style="color: rgb(0,0,0);font-size: 1.1em;font-weight: bold;line-height: normal;">Testing sequences for equality</span></p><p><span style="color: rgb(0,0,0);font-size: 1.1em;font-weight: bold;line-height: normal;"> </span>dds_seq_equal(seqptr1, seqptr2) tests two sequences for equality.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">/* first copy one sequence to another so we have something to compare */
+intsequence_t seq2 = DDS_SEQ_INITIALIZER(int32_t);
+dds_seq_copy(&amp;seq2, &amp;seq);
+assert(0 != dds_seq_equal(&amp;seq, &amp;seq2));</pre>
+</div></div><p><span style="color: rgb(0,0,0);font-size: 1.1em;font-weight: bold;line-height: normal;">Emptying and cleaning up sequences</span></p><ul><li>dds_seq_reset(seqptr) sets a sequence's length to 0, but does not free the internal buffer.</li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">dds_seq_reset(&amp;seq);
+assert(DDS_SEQ_LENGTH(seq) == 0);</pre>
+</div></div><ul><li><span style="font-size: 10.0pt;line-height: 13.0pt;"><em>dds_seq_cleanup(seqptr)</em> sets a sequence's length and capacity to 0, freeing the internal buffer. <em>You need to call this function once you are done with your sequence, to free all associated memory.</em> Note that this function does <em>not </em>call<em> free(seqptr)</em>. If your sequence structure itself was dynamically allocated, it is still up to you to free it.</span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">dds_seq_cleanup(&amp;seq);
+assert(DDS_SEQ_LENGTH(seq) == 0);
+assert(DDS_SEQ_DATA(seq) == NULL);</pre>
+</div></div>    <div class="aui-message problem shadowed information-macro">
+                            <span class="aui-icon icon-problem">Icon</span>
+                <div class="message-content">
+                            <p>Note that the above API is written as a set of generic macros and functions working on void pointers. The DDS sequence API does not know or care about the internal structure of the sequence elements: all copy, add, remove and free operations are shallow. If your sequence elements themselves hold pointers to dynamically allocated data, it is up to you to make sure that those pointers are properly managed.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">typedef struct {
+	char *string;
+} string_t;
+DDS_SEQUENCE(string_t, stringseq_t);
+string_t val;
+val.string = strdup(&quot;hello&quot;);
+stringseq_t seq = DDS_SEQ_INITIALIZER(string_t);
+dds_seq_append(&amp;seq, &amp;val);
+val.string[0] = &#39;y&#39;;
+printf(&quot;%s\n&quot;, DDS_SEQ_ITEM(seq, 0).string); /* will print &quot;yello&quot; */</pre>
+</div></div>
+                    </div>
+    </div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

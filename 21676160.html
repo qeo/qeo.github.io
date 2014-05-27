@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : /realms  (POST)</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API_21676144.html">REST API</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API-Reference-Documentation_21676149.html">REST API Reference Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : /realms  (POST)
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="table-wrap"><table class="confluenceTable">
+<tbody>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd">
+<p><strong>Description:</strong></p></td>
+<td class="confluenceTd">Create or modify a single realm of a Qeo administrator</td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>URL Structure:</strong></td>
+<td class="highlight-grey confluenceTd" data-highlight-colour="grey"><span class="nolink"><strong><a href="https://my.qeo.org/v1/realms" class="external-link" rel="nofollow">https://my.qeo.org/rest/v1/realms</a></strong></span></td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>HTTP Method:</strong></td>
+<td class="confluenceTd">POST</td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>Parameters:</strong></td>
+<td class="confluenceTd">
+<p>HTTP Authorization</p>
+<p><strong>For a Create:</strong><br />     Body: Must contain the realm name <br />              {&quot;name&quot;:&quot;...&quot;}</p>
+<p>               Parameter:<br />                 &quot;name&quot; : UTF-8 string representing the name of the user in the realm<br />                               Leading and trailing spaces are removed from the name.<br />                               The provided name cannot be empty. </p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Create example</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">{
+   &quot;name&quot;:&quot;Main Office Realm&quot;
+}</pre>
+</div></div>
+<p> </p>
+<p><strong>For a Modify:</strong><br />     Body: Must contain the realm name and the realm id<br />              {&quot;id&quot;:...,&quot;name&quot;:&quot;...&quot;}</p>
+<p>              Parameters:<br />                 &quot;id&quot;       : value of type long, representing the user identifier<br />                 &quot;name&quot; : UTF-8 string representing the name of the user in the realm<br />                               Leading and trailing spaces are removed from the name.<br />                               The provided name cannot be empty.<br /> </p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Modify example</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">{
+   &quot;id&quot;:123,
+   &quot;name&quot;:&quot;Main Office Realm&quot;
+}</pre>
+</div></div></td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>Response:</strong></td>
+<td class="confluenceTd">
+<p><strong>For a Create:</strong><br />HTTP 201 Created<br />Content-Type: application/json</p>
+<p><strong>For a Modify:</strong><br />HTTP 200 OK <br />Content-Type: application/json</p>
+<p>Body: Contains the created/modified realm in JSON format as it is stored in the database:<br />          {&quot;id&quot;:...,&quot;name&quot;:&quot;...&quot;,&quot;type&quot;:&quot;realm&quot;}</p>
+<p>          The returned realm contains 3 fields: <br />              &quot;id&quot;       : value of type long, representing the realm identifier<br />              &quot;name&quot; : UTF-8 string representing the realm name<br />              &quot;type&quot;   : type of object returned (always &quot;realm&quot;)</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Example response</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">{
+   &quot;id&quot;:123,
+   &quot;name&quot;:&quot;Main Office Realm&quot;
+   &quot;type&quot;:&quot;realm&quot;
+}</pre>
+</div></div></td></tr></tbody></table></div>
+<p> </p>
+<p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

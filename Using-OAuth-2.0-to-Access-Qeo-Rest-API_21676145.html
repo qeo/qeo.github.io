@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Using OAuth 2.0 to Access Qeo Rest API</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API_21676144.html">REST API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Using OAuth 2.0 to Access Qeo Rest API
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="UsingOAuth2.0toAccessQeoRestAPI-UsingOAuth2.0toAccessQeoRestAPI">Using OAuth 2.0 to Access Qeo Rest API</h4><p>Qeo uses the <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-22" class="external-link" rel="nofollow">OAuth 2.0 protocol</a> to authorize applications to access the Qeo Rest API on behalf of a Qeo administrator. OAuth permits an application to do this, without the administrator having to share its credentials (typically, a username and password pair) with the application. OAuth is a widely implemented protocol, used by companies (Facebook, Twitter, Google, Microsoft, Dropbox …) to protect their APIs.</p><p>The Qeo OAuth server uses <a href="http://en.wikipedia.org/wiki/OpenID" class="external-link" rel="nofollow">OpenID</a> to authenticate specific Qeo administrators. Any OpenID provider that implements the OpenID protocol correctly, can be used. The OAuth server provides an OpenID selection page that can be bypassed if the application provides the OpenID provider.</p><p>The Qeo OAuth server supports the following grant types:</p><ul><li>Authorization Code Grant</li><li>Implicit Grant</li></ul><h4 id="UsingOAuth2.0toAccessQeoRestAPI-Implicitvs.AuthorizationCode">Implicit vs. Authorization Code</h4><p>The Implicit Grant type immediately provides the client with a token to access the Rest API. After this token is expired, the user will have to log in again to give the client access to the Rest API.</p><p>The flow of the Authorization Code Grant type is more complex, as the client first receives an authorization code which the client can exchange for an access token. At the same time, the client receives a refresh token which can be used to retrieve a new access token without any further user interaction.</p><p>The Implicit Grant type is more suitable for applications that need short time access to the Rest API. If your application want to access the Rest API over a longer period of time, the Authorization Code grant type might be more suitable for you.</p><p>More details on the differences between the two grant types can be found in <a href="http://tools.ietf.org/html/rfc6749#section-4" class="external-link" rel="nofollow">RFC 6749</a>.</p><h4 id="UsingOAuth2.0toAccessQeoRestAPI-Overview">Overview</h4><p>An in depth overview is given in the following pages:</p><p><ul class='childpages-macro'><li><a href="Authorization-Code-Grant_21676146.html">Authorization Code Grant</a></li><li><a href="Implicit-Grant_21676147.html">Implicit Grant</a></li></ul></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676145/21958615.png">oauth2-slide1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676145/21958616.png">oauthorization.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

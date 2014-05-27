@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : REST API Reference Documentation</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API_21676144.html">REST API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : REST API Reference Documentation
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="RESTAPIReferenceDocumentation-RequiredReading">Required Reading</h4><p>It is important to understand the Qeo concepts and principles. For this, read the <a href="Qeo-System-Description_21675993.html">Qeo System Description</a>. Developers should also know how Qeo Security works. For that, read the <a href="Introduction-to-Qeo-Security_21676007.html">Introduction to Qeo Security</a> and the <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=Management+Procedures&amp;linkCreation=true&amp;fromPageId=21676149">Security Management Procedures</a>. </p><h4 id="RESTAPIReferenceDocumentation-Requirements">Requirements</h4><p>Take note of the following general requirements:</p><ul><li><p><strong>SSL only</strong></p><p>All requests must be send over SSL.</p><p> </p></li><li><p><strong>Authorization token</strong><br />All requests require a valid authorization code in the HTTP header (with the format &quot;Bearer authorization_code&quot;) see  <a href="Using-OAuth-2.0-to-Access-Qeo-Rest-API_21676145.html">Using OAuth 2.0 to Access Qeo Rest API</a> for more details on how to obtain a valid authorization code, e.g.  HTTP header:UTF-8 encoding</p><ul><li><p>Field name: Authorization.</p></li><li><p>Value: Bearer 5d9e5ce3e7f66ad2a4c3c249e5a6744269c8f7637356fedfdf87eb21121cf525f0a6a86dcc8d1b49.</p><p> </p></li></ul></li><li><p>String values used/returned by the REST API must be encoded in UTF-8.</p><p><strong style="font-size: 10.0pt;line-height: 13.0pt;"><br /></strong></p></li></ul><h4 id="RESTAPIReferenceDocumentation-GeneralInformation">General Information    </h4><h5 id="RESTAPIReferenceDocumentation-Versionnumbers">Version numbers</h5><p>The current REST API version is v1 and it is included in every request.</p><h5 id="RESTAPIReferenceDocumentation-Errorhandling">Error handling</h5><p>Errors are returned using the standard HTTP error code syntax, with a more detailed description in the returned body. <span style="font-size: 10.0pt;line-height: 13.0pt;">The body will be in JSON format, with the HTTP Content-Type set to &quot;application/json&quot;.</span></p><h5 id="RESTAPIReferenceDocumentation-BaseURL"><strong><span style="font-size: 10.0pt;line-height: 13.0pt;"> Base URL</span></strong></h5><p><span style="font-size: 10.0pt;line-height: 13.0pt;">The base URL of the REST API can be discovered in the <a href="Qeo-Root-Resource_21676148.html">Qeo Root Resource</a>, under &quot;management&quot; &gt; &quot;href&quot;.<br /></span></p><h4 id="RESTAPIReferenceDocumentation-RESTAPIMethods">REST API Methods</h4><h5 id="RESTAPIReferenceDocumentation-RealmMethods"> Realm Methods</h5><ul><li><p><a href="21676150.html">/realms (GET)</a> :</p><p>Retrieve all realms of a Qeo administrator</p></li><li><p><a href="21676160.html">/realms (POST)</a>:</p><p>Create or modify a realm of a Qeo administrator</p></li><li><p> <a href="21676152.html">/realms/{id} (DELETE)</a>:</p><p>Delete a realm of a Qeo administrator</p></li></ul><h5 id="RESTAPIReferenceDocumentation-UsersMethods">Users Methods</h5><ul><li><p> <a href="21676157.html">/realms/{id}/users (GET)</a>: </p><p>Retrieve all users within a realm of a Qeo administrator</p></li><li><p><a href="21676161.html">/realms/{id}/users (POST)</a>:</p><p>Create or modify a single user within a realm of a Qeo administrator</p></li><li><p> <a href="21676153.html">/realms/{id}/users/{id} (DELETE)</a>:</p><p>Delete a single user from a realm of a Qeo administrator </p></li></ul><h5 id="RESTAPIReferenceDocumentation-DeviceMethods"> Device Methods</h5><ul><li><p><a href="21676158.html">/realms/{id}/devices (GET)</a>:</p><p>Retrieve all devices within a realm of a Qeo administrator</p></li><li><p> <a href="21676162.html">/realms/{id}/devices (POST)</a>:</p><p>Create or modify a single device of a user within a realm of a Qeo administrator</p></li><li><p><a href="21676159.html">/realms/{id}/devices?users={id} (GET)</a>:</p><p>Retrieve all devices of a single user within a realm of a Qeo administrator  </p></li><li><p> <a href="21676154.html">/realms/{id}/devices/{id} (DELETE)</a>:</p><p>Delete a single device of a user within a realm of a Qeo administrator</p></li></ul><h5 id="RESTAPIReferenceDocumentation-PolicyMethods">Policy Methods</h5><ul><li><p> <a href="21676155.html">/realms/{id}/policy (GET)</a>:  </p><p>Retrieve the policy of every user in the realm of a Qeo administrator</p></li><li><p> <a href="21676163.html">/realms/{id}/policy (PUT)</a>:</p><p>Override the policy of every user in the realm of a Qeo administrator</p></li><li><p><a href="21676164.html">/realms/{id}/policy (POST)</a>:</p><p>Override the policy of a single user in the realm of a Qeo administrator</p></li><li><p><a href="21676156.html">/realms/{id}/policy?users={id} (GET)</a>:</p><p>Retrieve the policy of a single user in the realm of a Qeo administrator </p></li></ul><h5 id="RESTAPIReferenceDocumentation-ErrorMethods"> Error Methods</h5><ul><li><p><a href="Error-list_21676151.html">Error list</a>: </p><p>List of all possible errors that can be returned </p></li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

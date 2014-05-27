@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Setting Up Remote Registration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Platform-Integration-Documents_21675985.html">Platform Integration Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Platform-Security_21675987.html">Qeo Platform Security</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Setting Up Remote Registration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="SettingUpRemoteRegistration-AbouttheDefaultLinuxImplementation">About the Default Linux Implementation</h4><p>As a platform integrator you need to implement/use the Qeo Platform Security API in such a way that informs Qeo which registration procedure to use together with the data needed. The default Linux implementation provides an example on how to do this.</p><h4 id="SettingUpRemoteRegistration-OTCRegistration">OTC Registration</h4><p>The default Linux implementation supports both OTC and Remote Registration procedures. By default, the Local Registration procedure is used.  Qeo requests registration credentials, by calling the <em style="font-size: 14.0px;line-height: 1.4285715;">qeo_platform_security_registration_credentials_needed</em> function. This results in the <em style="font-size: 14.0px;line-height: 1.4285715;">qeo_platform_on_registration_params_needed_cb</em> callback being called. The default implementation prompts the user on the command line to enter the One Time Code (OTC) and the URL of the Security Management Server (SMS).</p><h4 id="SettingUpRemoteRegistration-SettingUpRemoteRegistration">Setting Up Remote Registration</h4><h5 id="SettingUpRemoteRegistration-RemoteRegistrationFile">Remote Registration File</h5><p>In order to use the remote registration procedure, you need a remote registration file. This is a simple text file containing the suggested user name and a registration window (expressed in seconds). below is an example: </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Example of remote registration file</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: plain; gutter: false" style="font-size:12px;">this_user 120</pre>
+</div></div>    <div class="aui-message hint shadowed information-macro has-no-icon">
+                        <div class="message-content">
+                            Make sure both items are separated by a space character.
+                    </div>
+    </div>
+<h5 id="SettingUpRemoteRegistration-EnablingRemoteRegistration">Enabling Remote Registration</h5><p>In order to enable Remote Registration, set the environment variable REMOTE_REGISTRATION_FILE<em style="font-size: 14.0px;line-height: 1.4285715;"> </em> to point to that file:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Example of remote registration file</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: plain; gutter: false" style="font-size:12px;">&gt; export REMOTE_REGISTRATION_FILE=&lt;path to the file&gt;</pre>
+</div></div><p>When Qeo requests the registration credentials and <em>qeo_platform_on_registration_params_needed_cb</em> is called:</p><ol><li>The default Linux implementation checks whether the <em>REMOTE_REGISTRATION_FILE</em> environment variable is set.</li><li>If so, it tries to open the specified file for reading.</li><li>If successful, it reads the suggested user name and registration window value from the file.</li><li>It then passes on that information to Qeo using the <em>qeo_platform_security_set_remote_registration_params </em>function.</li></ol><p> </p>    <div class="aui-message problem shadowed information-macro">
+                            <span class="aui-icon icon-problem">Icon</span>
+                <div class="message-content">
+                            <p>If the environment variable is not set or if anything goes wrong while trying to open the file, the default implementation falls back to the Local Registration procedure.</p>
+                    </div>
+    </div>
+<h5 id="SettingUpRemoteRegistration-DeviceConfirmation">Device Confirmation</h5><p>When Remote Registration is performed using the Android application, the remote registration procedure calls the <em>qeo_platform_security_remote_registration_confirmation_needed</em> function. The remote device is required to provide a response:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Example of remote registration confirmation</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">Management app wants to register us in realm &lt;Realm-Name&gt;, URL: HTTP:join.qeo.org/ . [Y/n]</pre>
+</div></div><p>Press enter or type Y to continue registration, type n to cancel registration.</p>    <div class="aui-message hint shadowed information-macro has-no-icon">
+                        <div class="message-content">
+                            <p>Note that the file can be a regular file or a FIFO special file. The latter can be used to write the remote registration data only after the user has, for instance, pressed a button on the device.</p>
+                    </div>
+    </div>
+<h5 id="SettingUpRemoteRegistration-AutomaticConfirmationandCancellation">Automatic Confirmation and Cancellation</h5><p>You can set a device to automatically confirm by setting the <em>REMOTE_REGISTRATION_AUTO_CONFIRM </em>environment variable.</p><ul><li>Setting the value to 1 corresponds with automatic confirmation,</li><li>Setting it to 0 corresponds with automatic cancellation. You will not be able to register the device.</li></ul><h5 id="SettingUpRemoteRegistration-DeviceName">Device Name</h5><p>The device name, which is also shown on the WebUI is the user friendly name of the device. This string is part of DeviceInfo. This is provided by the platform integrator by implementing the <em>&lt;QEO_SDK&gt;/c/platform/include/qeo/device.h</em> header.</p><p>The current default implementation for this parameter is:</p><ul><li><em>‘uname --nodename’</em> for Linux platforms</li><li><em>‘android.os.Build.MODEL’ + ‘android.os.Build.SERIAL`</em> for Android platforms (some additional logic is applied for devices that do not implement the serial number correctly)</li></ul><p> </p><p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

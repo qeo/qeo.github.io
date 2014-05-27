@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Structure of a QDM</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Structure of a QDM
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="StructureofaQDM-StructureofaQDM">Structure of a QDM</h4><p>The diagram below shows the structure of a QDM:</p><p><img class="confluence-embedded-image" src="attachments/21676179/21958625.png" data-image-src="attachments/21676179/21958625.png"></p><p><span style="line-height: 13.0pt;font-size: 10.0pt;">It contains the following nested building blocks:</span></p><h5 id="StructureofaQDM-MODULE">MODULE</h5><p>Modules are namespaces. They group data types belonging to the same domain. Their primary purpose is to avoid name clashes. When multiple parties are developing Data Types, use of the same names is unavoidable. By using modules, use of the same name is possible. Names can thus be used by multiple parties in different contexts, as long as each party uses a different module.</p><p><em>Example:</em> one application uses a DeviceID topic consisting of a 10-character string. Another application uses a DeviceID topic which is an integer. When these topics meet in the Qeo world, they would clash without the use of modules. Using modules, the fully qualified topic names become e.g. CompanyA.AppB.DeviceID and CompanyC.WackyApp.DeviceID. <span style="line-height: 13.0pt;font-size: 10.0pt;">In situations where clash or confusion is impossible, we can use the simple name (e.g. DeviceID).</span></p><h5 id="StructureofaQDM-STRUCT">STRUCT</h5><p>A struct represents a physical or logical entity with a certain behavior and a number of properties. These properties are represented by members (see below). Structs either have a behaviour or not. Structs without behaviour cannot stand alone, but can be used as members in a larger struct. Structs with behaviour can be published on Qeo. </p><p><em>Example:</em> consider DeviceID as a 128-bit Qeo struct. This is a logical concept that has no meaning on its own, and therefore no behavior. Now consider DeviceInfo, a large struct that uses DeviceID as one of its members (next to Serial Number, Name,...). DeviceInfo has meaning and can be published on Qeo. DeviceInfo therefore has behaviour (State, in this case).</p><h5 id="StructureofaQDM-MEMBER">MEMBER</h5><p>A member represents a property of an object or concept that is itself represented by a struct. Members have a type, which can be:</p><ul><li><em>A primitive</em> (boolean, integer, floating point, string)</li><li><em>A collection </em>(see below for more info)</li><li><em>An aggregation</em> (i.e. another struct)</li></ul><p>There are three types of collection types:</p><ul><li><em>Sequence:</em> a variable-length list of elements of the same type. It can contain any number of elements.</li><li><em>Array:</em> a list of elements of the same type, with a fixed length n. The length is defined when defining the member in the QDM. Multi-dimensional arrays are possible.</li><li><em>Map</em>: a variable-length list of key/value pairs. All keys are of the same primitive type. All values also share the same type. The type of keys and values can differ.</li></ul><p>At this moment, Qeo only supports sequences. Other collection types will be supported later.</p><p>A member can be:</p><ul><li><em>Marked (or not) as key</em>: A key member is one that is part of the unique identity of the struct (e.g. DeviceID which is often used as key member).</li><li><em>Marked as Optional: </em>optional members can be absent from a sample. <span style="line-height: 13.0pt;font-size: 10.0pt;">Note that optional members are not yet supported.</span></li></ul><h4 id="StructureofaQDM-The&lt;doc&gt;Element">The &lt;doc&gt; Element</h4><p>Use the &lt;doc&gt; element to add comments and clarifications to your QDM. They act as comments are inserted as such in the code by the Code Generator. These elements can be placed in every level of the QDM. </p>    <div class="aui-message warning shadowed information-macro">
+                    <p class="title">Declaration order of structs in a QDM</p>
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>It is possible to define multiple struct types in the same QDM. If structs defined in a single QDM file reference each other (i.e. struct A includes a member of type &quot;struct B&quot;, where A and B are defined in the same file), you need to make sure the struct types are defined in the correct order: the &quot;inner&quot; struct must be defined first. The code generator tool will consider your QDM to be in error otherwise.</p><p>For example, the following QDM is incorrect:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: html/xml; gutter: false" style="font-size:12px;">&lt;struct name=&quot;A&quot;&gt;
+	&lt;member name=&quot;substruct&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;B&quot; /&gt;
+&lt;/struct&gt;
+&lt;struct name=&quot;B&quot;&gt;
+	&lt;member name=&quot;x&quot; type=&quot;int32&quot; /&gt;
+&lt;/struct&gt;</pre>
+</div></div><p>The correct way to do this, is to switch the definitions of struct A and struct B:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;struct name=&quot;B&quot;&gt;
+	&lt;member name=&quot;x&quot; type=&quot;int32&quot; /&gt;
+&lt;/struct&gt;
+&lt;struct name=&quot;A&quot;&gt;
+	&lt;member name=&quot;substruct&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;B&quot; /&gt;
+&lt;/struct&gt;</pre>
+</div></div>
+                    </div>
+    </div>
+<p> </p><p> </p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676179/21958625.png">qdm_structure.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

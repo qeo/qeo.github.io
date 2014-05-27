@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : /realms/{id}/policy  (POST)</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API_21676144.html">REST API</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API-Reference-Documentation_21676149.html">REST API Reference Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : /realms/{id}/policy  (POST)
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="table-wrap"><table class="confluenceTable">
+<tbody>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>Description:</strong></td>
+<td class="confluenceTd">Replaces the current policy of a single user in the realm of a Qeo administrator</td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>URL Structure:</strong></td>
+<td class="highlight-grey confluenceTd" data-highlight-colour="grey"><span class="nolink"><strong><span class="nolink"><span class="nolink"><a rel="nofollow">https://my.qeo.org/qeo-rest-service/v1/realms/{id}/policy</a></span></span></strong></span> </td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>HTTP Method:</strong></td>
+<td class="confluenceTd">POST</td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>Parameters:</strong></td>
+<td class="confluenceTd">
+<p>HTTP Authorization</p>
+<p><strong>Path parameter:</strong><br />    identifier of the realm to be interrogated (value is of type long)</p>
+<p><strong>Body</strong>: Contains a list of policy rules and associated access rights of a single user in the realm in JSON format:<br />          {&quot;user&quot;:...,&quot;policy&quot;:[{ &quot;name&quot;:&quot;...&quot;,&quot;read_access&quot;:{&quot;users&quot;:[...]},&quot;write_access&quot;:{&quot;users&quot;:[...]}}]}</p>
+<p>         - All policy rules of the user in the realm will be replaced with the provided policy content.<br />         - Unknown user will result in an error (HTTP 400 Bad Request). </p>
+<p>          Parameters on user level:<br />              &quot;user&quot; : value of type long, representing the user identifier<br />              &quot;policy&quot; : list of policy rules applicable for the specified user</p>
+<p>          Parameters on policy level:<br />              &quot;name&quot; : UTF-8 string representing the policy rule<br />                            Leading and trailing spaces are removed from the name.<br />                            The provided name cannot be empty.<br />              &quot;read_access&quot; : (<strong>optional</strong>) determines read access of users on the policy rule<br />                         <strong>null     </strong>: (<strong>default</strong>) no read access for the policy rule<br />                        &quot;users&quot; : list of user identifiers of type long<br />                                     possible values: <strong>null </strong>: no read access for the policy rule<br />                                                                 <strong>[] </strong>: empty array: coarse grained read access for the policy rule<br />                                                             <strong>[1,3]</strong> : filled array: fine grained read access for the policy rule<br />                                                                      <strong>Note</strong>: cannot be mixed with coarse grained write access<br />              &quot;write_access&quot; : (<strong>optional</strong>) determines write access of users on the policy rule<br />                         <strong>null     </strong>: (<strong>default</strong>) no write access for the policy rule<br />                        &quot;users&quot; : list of user identifiers of type long<br />                                     possible values: <strong>null </strong>: no write access for the policy rule<br />                                                                 <strong>[] </strong>: empty array: coarse grained write access for the policy rule<br />                                                             <strong>[1,3]</strong> : filled array: fine grained write access for the policy rule<br />                                                                      <strong>Note</strong>: cannot be mixed with coarse grained read access</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Request Example</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">https://my.qeo.org/qeo-rest-service/v1/realms/103/policy 
+{
+   &quot;user&quot;:5,
+   &quot;policy&quot;:[{ 
+               &quot;name&quot;:&quot;my::hello::world::topic3::*&quot;,
+               &quot;read_access&quot;:{
+                               &quot;users&quot;:[4,5,6]
+                             },
+               &quot;write_access&quot;:{
+                               &quot;users&quot;:[5]
+                              }
+              },{ 
+               &quot;name&quot;:&quot;my::hello::world::topic2::*&quot;,
+               &quot;read_access&quot;:{
+                               &quot;users&quot;:[4]
+                             },
+               &quot;write_access&quot;:null
+              }]
+}</pre>
+</div></div></td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>Response:</strong></td>
+<td class="confluenceTd"> 
+<p>HTTP 200 OK <br />Content-Type: application/json</p>
+<p>Body: Contains a list of users with their list of policy rules and associated access rights in JSON format:<br />         {&quot;user&quot;:...,&quot;type&quot;:&quot;user&quot;,&quot;policy&quot;:[{&quot;name&quot;:&quot;..&quot;,&quot;type&quot;:&quot;policy_rule&quot;,&quot;read_access&quot;:{&quot;users&quot;:[]},<br />                                                          &quot;write_access&quot;:{&quot;users&quot;:[]}},{...}]}</p>
+<p>          The returned parameters on user level: <br />              &quot;user&quot;   : value of type long, representing the user identifier<br />              &quot;type&quot;   : type of object returned (always &quot;user&quot;)<br />              &quot;policy&quot; : list of policy rules applicable for the specified user<br /><br />          The returned parameters on policy level:<br />              &quot;name&quot; : UTF-8 string representing the policy rule<br />              &quot;type&quot;   : type of object returned (always &quot;policy_rule&quot;)<br />              &quot;users&quot; : list of users identifiers (values of type long), where the policy rule belongs to<br />              &quot;realm&quot; : value of type long, represents the realm identifier<br />              &quot;read_access&quot; : determines read access of users on the policy rule<br />                        <strong>null     </strong>: no read access for the policy rule<br />                       &quot;users&quot; : list of user identifiers of type long<br />                                    possible values: <strong>null </strong>: no read access for the policy rule<br />                                                                <strong>[] </strong>: empty array: coarse grained read access for the policy rule<br />                                                            <strong>[1,3]</strong> : filled array: fine grained read access for the policy rule<br />              &quot;write_access&quot; : determines write access of users on the policy rule<br />                        <strong>null     </strong>: no write access for the policy rule<br />                       &quot;users&quot; : list of user identifiers of type long<br />                                    possible values: <strong>null </strong>: no write access for the policy rule<br />                                                                <strong>[] </strong>: empty array: coarse grained write access for the policy rule<br />                                                            <strong>[1,3]</strong> : filled array: fine grained write access for the policy rule</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Response Example</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">{
+  &quot;user&quot;:5
+  &quot;type&quot;:&quot;user&quot;,
+  &quot;policy&quot;:[{ 
+              &quot;name&quot;:&quot;my::hello::world::topic3::*&quot;,
+              &quot;users&quot;:[5],
+              &quot;realm&quot;:103,
+              &quot;type&quot;:&quot;policy_rule&quot;
+              &quot;read_access&quot;:{
+                               &quot;users&quot;:[4,5,6]
+                            },
+              &quot;write_access&quot;:{
+                               &quot;users&quot;:[6]
+                             }
+            },{ 
+              &quot;name&quot;:&quot;my::hello::world::topic2::*&quot;,
+              &quot;users&quot;:[5],
+              &quot;realm&quot;:103,
+              &quot;type&quot;:&quot;policy_rule&quot;
+              &quot;read_access&quot;:{
+                              &quot;users&quot;:[4]
+                             },
+              &quot;write_access&quot;:null
+            }]
+}</pre>
+</div></div></td></tr></tbody></table></div>
+<p> </p>
+<p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

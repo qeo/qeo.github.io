@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : User-Level Access Control</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Introduction-to-Qeo-Security_21676007.html">Introduction to Qeo Security</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : User-Level Access Control
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created and last modified by <span class='author'> lissensj</span> on May 26, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="User-LevelAccessControl-Purpose">Purpose</h4><p><span style="line-height: 13.0pt;font-size: 10.0pt;">The main purpose of user-level access control is to allow the realm administrator to define which users have access to which Qeo data Topics.</span></p><h4 id="User-LevelAccessControl-Prerequisites">Prerequisites</h4><p>There are prerequisites on two levels:</p><ul><li><strong>Basic security configuration:</strong> The Realm Administrator has set up the Realm</li><li><strong>Policies:</strong> The default Qeo security policy allows every user added to the realm read and write access to every Qeo topic. If the Realm Administrator wants to deviate from this, he needs access to the Security Management Server (SMS) such he can edit the policy.</li></ul><p>To allow Qeo-enabled devices to apply the realm policy, at least one Qeo device in the Realm requires access to the SMS to pull the latest policy file. Once pulled, this access is no longer required until the need for a new update arises.</p><h4 id="User-LevelAccessControl-Architecture">Architecture</h4><h5 id="User-LevelAccessControl-OntheSecurityManagementServer(SMS)">On the Security Management Server (SMS)</h5><p>The SMS manages and stores the Qeo security policy per Realm, and offers the Administrator the possibility to edit policy rules per user. The Realm security policy is actually a concatenation of all security policies of all users.</p><h5 id="User-LevelAccessControl-OntheQeo-EnabledDevice">On the Qeo-Enabled Device</h5><p>The realm policy is pushed toward the Policy Enforcement Points (PEPs), which store it and enforce the configured rules.</p><h4 id="User-LevelAccessControl-Actors">Actors</h4><p>The following actors take part:</p><ul><li><strong> Qeo Realm Administrator: </strong> specify the needed policy rules.</li><li><strong> Security Management Server: </strong> store and provide the policy file to qeo-enabled devices.</li><li><strong>Qeo-enabled devices:</strong> the Policy Enforcement Point (PEP) enforces the policy rules.</li></ul><h4 id="User-LevelAccessControl-Concepts"><strong>Concepts</strong></h4><h5 id="User-LevelAccessControl-Policy(File)">Policy (File)</h5><p><span style="line-height: 13.0pt;font-size: 10.0pt;">The Qeo Policy is a set of</span> <em style="line-height: 13.0pt;font-size: 10.0pt;">white list</em> <span style="line-height: 13.0pt;font-size: 10.0pt;"> rules. These rules define which topics a User in the Realm can access. If a topic is not mentioned in a user's rules, the user has no access whatsoever to that topic. There are two kinds of rules: </span><strong style="line-height: 13.0pt;font-size: 10.0pt;">coarse-grained</strong> <span style="line-height: 13.0pt;font-size: 10.0pt;"> and</span> <strong style="line-height: 13.0pt;font-size: 10.0pt;">fine-grained</strong><span style="line-height: 13.0pt;font-size: 10.0pt;">.</span></p><ul><li><strong>Coarse-grained</strong> rules grant a user wholesale access to <em>all</em> data on a topic for either reading, writing, or both.</li><li><strong>Fine-grained</strong> rules further restrict a user's access to a given topic. With these rules, you can express that a user may only see data on the topic that was published by certain users, or that the data that a user publishes on the topic can only be seen by certain other users.</li></ul><p>Within the same policy, for a single topic,</p><ul><li>you <em>can</em> define a coarse-grained rule for some users and a fine-grained rule for other users</li><li>you <em>cannot</em> grant a single user fine-grained read rights and coarse-grained write rights or vice versa.</li></ul><p>For information on the policy file syntax and interpretation rules, refer to <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=How+to+Define+a+Policy&amp;linkCreation=true&amp;fromPageId=21676011">How to Define a Policy</a>.</p><h4 id="User-LevelAccessControl-ObtainingthePolicyandredistribution">Obtaining the Policy and redistribution</h4><p>When a PEP starts up, it checks whether there is a policy stored already on the device. If this is not the case yet (e.g. the PEP starts up for the first time or the policy is removed on the device), the policy is fetched from the SMS, validated, enforced and published on the Qeo topic org::qeo::system::policy in the secured Qeo realm. This way of working assures that the other PEP's in the realm are provided with the latest policy just fetched by the former PEP. Upon receiving a new policy, the PEP validates, enforces and stores it on the device.</p><h4 id="User-LevelAccessControl-PolicyUpdates">Policy Updates</h4><p>Whenever a policy is updated on the SMS (i.e due to a user being added, or existing policy rules being modified) , every PEP in the Qeo realm needs to obtain and enforce this updated policy to become effective.</p><p>Fetching of an updated policy file from the SMS can be done in multiple ways:</p><ul><li><strong>Android:</strong></li></ul><ol><li style="list-style-type: none;background-image: none;"><ol><li>The Qeo Management Application for Android (i.e. an Android Service) checks every 2 minutes if it still has the latest policy. If this is not the case, it is fetched from the SMS and redistributed within the realm.</li></ol></li></ol><ul><li><strong>Native C / Linux:</strong></li></ul><ol><li style="list-style-type: none;background-image: none;"><ol><li>Remove the policy file on one of the devices in the Realm and restart one of the apps on the device.<br />The policy file is stored in the <em>~/.qeo directory</em>. and has a name similar to <em>2b_policy.mime</em> (with <em>2b</em> being the realm ID).<br /> <br />or<br /> </li><li><p>Launch the Qeo safeguard daemon, which will check every 2 minutes if the latest policy is available. If this is not the case, it is fetched from the SMS and redistributed within the realm.<br />The daemon can be found in $QEO_HOME/c/bin/&lt;ARCH&gt;/qeo-safeguard-d. E.g. use the following command to launch the daemon for i686-linux:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">LD_LIBRARY_PATH=$QEO_HOME/c/lib/i686-linux $QEO_HOME/c/bin/i686-linux/qeo-safeguard-d</pre>
+</div></div></li></ol></li></ol>    <div class="aui-message warning shadowed information-macro">
+                    <p class="title">IMPORTANT</p>
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>Policy updates are enforced within 2 minutes, provided that the Qeo Management application or Qeo safeguard daemon can contact the SMS.</p>
+                    </div>
+    </div>
+<h4 id="User-LevelAccessControl-Notes">Notes</h4><p>Please take note of the following:</p><ul><li>A Qeo user (as known on the SMS) has the same access rights regardless of the devices he/she uses.</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Remote Registration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Introduction-to-Qeo-Security_21676007.html">Introduction to Qeo Security</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Device-Registration_21676008.html">Device Registration</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Remote Registration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="RemoteRegistration-AboutTheRemoteRegistrationProcedure">About The Remote Registration Procedure</h4><p>The Remote Registration procedure allows a Realm Administrator to add devices to a given Qeo realm using a <a href="http://confluence.technicolor.com/display/QArchive/Remote+Device+Registration+For+Android">Remote Registration App</a>. The latter is not available as standalone app, but is embedded in the Android Qeo Service. For convenience, Remote Registration App is used instead of Remote Registration Functionality. This remote registration functionality makes it possible to add, for instance, a headless device such as a gateway to a specific realm. However, this procedure is not limited to headless devices but can also be used for other devices as well.</p><p>Depending on the platform integration, a device can use the Remote Registration procedure or the Direct Registration procedure.</p><h4 id="RemoteRegistration-HowDoesItWork">How Does It Work</h4><p>The following actors are involved in the procedure:</p><ul><li>The <strong>Remote Device</strong> to be registered.</li><li>The <strong>Realm Administrator</strong> who makes use of the Remote Registration App.</li><li>The <strong>Remote Registration App</strong> which runs on a device owned by the Realm Administrator.</li><li>The <strong>Security Management Server (SMS)</strong>.</li></ul><p>The Remote Device uses SCEP to communicate with the SMS, as in the Direct Registration procedure. On the other hand, the Remote Registration App uses <a href="REST-API_21676144.html">REST</a> to communicate with the SMS.</p><p>The Remote Device and the Remote Registration App exchange information via Qeo Topics on the <a href="Qeo-Glossary_21676015.html#QeoGlossary-Open_Realm">Open Realm</a>. The Open Realm does not require authentication and instances of topics exchanged on the Open Realm are not encrypted. However, some instance data fields have to be encrypted, e.g., the OTC in the registration credentials which is encrypted by the Remote Device's public key. Moreover, the Open Realm can only be used for the Remote Registration procedure where only two Qeo topics are allowed, namely, the <em>RegistrationRequest</em> topic and the <em>RegistrationCredentials<a href="http://gitolite.edegem.eu.thmulti.com/qeo/qeo-qdm.git/tree/qdm/catalog/qeo_RegistrationCredentials.xml" class="external-link" rel="nofollow"></a></em> topic.</p><h4 id="RemoteRegistration-Diagram">Diagram</h4><p>The interaction diagram below gives an overview of the Remote Registration procedure. It is assumed that the Realm Administrator has already created a Qeo realm:</p><p><img class="confluence-embedded-image" width="500" src="attachments/21676010/21958413.jpg" data-image-src="attachments/21676010/21958413.jpg"></p><h4 id="RemoteRegistration-Procedure">Procedure</h4><p>The procedure is described below:</p><ol><li>The Remote Device publishes a <em>RegistrationRequest</em> topic instance. This can be triggered, for example, right after the Remote Device has booted or whenever a specific button is pressed on that device. For more information on this, please refer to the <a href="Qeo-Platform-Security_21675987.html">platform integration section</a>.<br />The RegistrationRequest topic contains the following data fields:<ul><li>The device ID, a unique identifier of the Remote Device.</li><li>A public key generated by the Remote Device.</li><li>The suggested user name, i.e. a proposal for the Remote Device user-name.</li><li>The registration status which is initially set to &quot;unregistered&quot;.</li></ul></li><li>The Remote Registration App reads from the <em>RegistrationRequest</em> topic and updates its UI accordingly.</li><li>If the Remote Device user is not yet part of the realm, the Realm Administrator adds him or her to the realm. This occurs through the Remote Registration App which in its turn passes on the request to the SMS via REST calls.</li><li>The SMS confirms the request and the Remote Registration App updates its UI accordingly.</li><li>The Realm Administrator adds the Remote Device to the realm under a given user. This occurs through the Remote Registration App which in its turn passes on the request to the SMS.</li><li>The SMS sends back a One Time Code (OTC).</li><li>The Remote Registration App publishes a <em>RegistrationCredentials</em> topic instance. The <em>RegistrationCredentials </em>topic contains the following data fields:<ul><li>The device ID as provided in the Registration Request instance.</li><li>The Remote Device's public key as provided in the Registration Request instance.</li><li>An OTC that was encrypted using the Remote Device's public key.</li><li>The URL to reach the SMS and carry out the device registration.</li><li>The realm name.</li></ul></li><li>The Remote Device reads the <em>RegistrationCredentials</em> topic instance and matches the key fields with the <em>RegistrationRequest</em>.</li><li>Optionally, the Remote Device user can be asked to confirm whether he or she wants to register his or her device to the realm. For more information on this, please refer to the <a href="Qeo-Platform-Security_21675987.html">platform integration section</a>.</li><li>The Remote Device user confirms.</li><li>The Remote Device decrypts the OTC and uses it to request a signed certificate from the SMS.</li><li>The Remote Device updates the <em>RegistrationRequest</em> topic instance's state field to &quot;registering&quot;.</li><li>The SMS verifies the OTC and sends a signed certificate back to the device.</li><li>The device removes the <em>RegistrationRequest</em> topic instance.</li><li>The Remote Registration App is notified about that removal and consequently removes the corresponding <em>RegistrationCredentials</em> topic instance. It also retrieves the list of registered devices from the SMS to confirm that the device is actually registered, and updates its UI accordingly.</li></ol><h4 id="RemoteRegistration-ErrorHandling">Error Handling</h4><h5 id="RemoteRegistration-Registrationwindow">Registration window</h5><p>The Remote Device only publishes the <em>RegistrationRequest</em> topic instance for a limited amount of time, namely, the registration window. The <em>RegistrationRequest</em> is published on the Qeo Open Realm, and thus can be read by every Qeo Actor which is part of the Qeo Open Domain. In order to prevent a malicious Actor from abusing this information the registration window is limited in time.</p><h4 id="RemoteRegistration-Errorcode">Error code</h4><p>In case something goes wrong at the Remote Device side, the device updates the RegistrationRequest topic instance's error code field. This allows the Remote Registration App to inform the Realm Administrator of what went wrong, and the Realm Administrator can consequently take the appropriate action(s).</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676010/21958413.jpg">remote-reg-process.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676010/21958414.jpg">RemoteReg.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Using the Event Reader and Writer in C</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Developer-Guide_21676089.html">Qeo Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676132.html">Qeo C (Native) Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Start-Developing-a-Qeo-Enabled-Application-in-C_21676133.html">Start Developing a Qeo Enabled Application in C</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Using the Event Reader and Writer in C
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created and last modified by <span class='author'> lissensj</span> on May 26, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This section describes how to do basic eventing using Qeo, i.e. publishing on, and receiving data from, event Topics. It covers the following topics:</p><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1401114962208 {padding: 0px;}
+div.rbtoc1401114962208 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1401114962208 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1401114962208'>
+<ul class='toc-indentation'>
+<li><a href='#UsingtheEventReaderandWriterinC-WritingData'>Writing Data</a></li>
+<li><a href='#UsingtheEventReaderandWriterinC-ReceivingData'>Receiving Data</a>
+<ul class='toc-indentation'>
+<li><a href='#UsingtheEventReaderandWriterinC-CodeExample:'>Code Example:</a></li>
+</ul>
+</li>
+<li><a href='#UsingtheEventReaderandWriterinC-CleaningupResources-ClosingreadersandWriters'>Cleaning up Resources - Closing readers and Writers</a></li>
+</ul>
+</div></p><h4 id="UsingtheEventReaderandWriterinC-WritingData">Writing Data</h4><p>The first item you need in order to be able to publish data samples as events is an Event Writer. Creating an event writer is done using the <em>qeo_factory_create_event_writer()</em> function. The method needs four arguments:</p><ol><li>The previously created Qeo factory to be used for creating the writer.</li><li>The description of the type for which to create a writer.</li><li>The listener to be used for policy update notifications (see <a href="C_21676116.html">C</a>).</li><li>An optional user data argument.  The user data will be passed back to the application in all listener callback invocations.</li></ol>    <div class="aui-message problem shadowed information-macro">
+                            <span class="aui-icon icon-problem">Icon</span>
+                <div class="message-content">
+                            <p>Creation of an event writer for a type that contains key fields will fail and return NULL because events are not allowed to have key fields.</p>
+                    </div>
+    </div>
+<p><em><strong>Code Example:</strong></em></p><p>The code snippet below shows you how to:</p><ul><li>Create an Event Writer which will allow you to write data samples (Events) of type <em>org_qeo_sample_simplechat_ChatMessage_t</em>;</li><li>Actually publish your data samples.</li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: true" style="font-size:12px;">#include &lt;qeo/api.h&gt;
+
+#include &quot;QSimpleChat_ChatMessage.h&quot;
+
+int main(int argc, const char **argv)
+{
+    qeo_factory_t *qeo;
+    qeo_event_writer_t *msg_writer;
+
+    /* local variables for storing the message before sending */
+    char buf[128];
+    org_qeo_sample_simplechat_ChatMessage_t chat_msg = { .message = buf };
+
+    /* initialize */
+    qeo = qeo_factory_create();
+    msg_writer = qeo_factory_create_event_writer(qeo, org_qeo_sample_simplechat_ChatMessage_type,
+                                                 NULL, 0);
+    /* start conversing */
+    while (!done) {
+        fgets(buf, sizeof(buf), stdin);
+        qeo_event_writer_write(msg_writer, &amp;chat_msg);
+    }
+    /* clean up */
+    qeo_event_writer_close(msg_writer);
+    qeo_factory_close(qeo);
+    return 0;
+} </pre>
+</div></div><h4 id="UsingtheEventReaderandWriterinC-ReceivingData">Receiving Data</h4><p>In order to subscribe to, and receive data from, an event Topic, you have to create an Event Reader. More specifically, in our example, we need a reader for instances of type <em>org_qeo_sample_simplechat_ChatMessage_t</em>. Creating a reader is done using the <em>qeo_factory_create_event_reader()</em> function. The function expects four arguments:</p><ol><li><p>The previously created Qeo factory to be used for creating the reader.</p></li><li><p>The description of the type for which to create a reader (this should be the same as for the corresponding event writer).</p></li><li><p>The listener to be used for data sample reception and policy update notifications.</p></li><li><p>An optional user data argument.  The user data will be passed back to the application in all listener callback invocations.</p></li></ol><p>The listener structure can contain two callback functions for data sample reception:</p><ul><li><p>(required) the <em>on_data() callback</em> function that will be called whenever there is new data available (in our example of the type org_qeo_sample_simplechat_ChatMessage_t);</p></li><li><p>(optional) the <em>on_no_more_data()</em> callback function that will be called if all received data has been notified to the application and there is no more data at this moment.</p></li></ul><p>There are situations where the <em>on_data() </em>callback function can be called several times in a short period because a burst of samples arrives.  Depending on the application you may want to postpone certain actions until the burst is completely finished (e.g. redrawing a GUI, storing some data in a database, ...).  To be able to do this, you can use the <em>on_no_more_data()</em> callback. This callback is invoked at the end of such a sample burst. It is best practice that the <em>on_data()</em> call should always aggregate samples and the <em>on_no_more_data(</em>) should trigger a refresh of the UI. </p><h5 id="UsingtheEventReaderandWriterinC-CodeExample:">Code Example:</h5><p>In the following code snippet we will show you how to:</p><ul><li><p>Create an event reader that allows you to receive data samples of the type <em>org_qeo_sample_simplechat_ChatMessage_t</em>;</p></li><li><p>Implement the reader listener notification callback function <em>on_data()</em>.</p></li></ul><div><div class="syntaxhighlighter  java"><p> </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: true" style="font-size:12px;">#include &lt;qeo/api.h&gt;
+
+#include &quot;QSimpleChat_ChatMessage.h&quot;
+
+static void on_chat_message(const qeo_event_reader_t *reader,
+                            const void *data,
+                            uintptr_t userdata)
+{
+    org_qeo_sample_simplechat_ChatMessage_t *msg = (org_qeo_sample_simplechat_ChatMessage_t *)data;
+
+    /* whenever a new data sample arrives, print it to stdout */
+    printf(&quot;%s : %s\n&quot;, msg-&gt;from, msg-&gt;message);
+}
+
+static qeo_event_reader_listener_t _listener = { .on_data = on_chat_message };
+
+int main(int argc, const char **argv)
+{
+    qeo_factory_t *qeo;
+    qeo_event_reader_t *msg_reader;
+    int done = 0;
+
+    /* initialize */
+    qeo = qeo_factory_create();
+    msg_reader = qeo_factory_create_event_reader(qeo, org_qeo_sample_simplechat_ChatMessage_type,
+                                                 &amp;_listener, 0);
+
+    /* start receiving messages */
+    while (!done) {
+        sleep(60);
+    }
+
+    /* clean up */
+    qeo_event_reader_close(msg_reader);
+    qeo_factory_close(qeo);
+    return 0;
+}</pre>
+</div></div><p> </p></div></div><h4 id="UsingtheEventReaderandWriterinC-CleaningupResources-ClosingreadersandWriters">Cleaning up Resources - Closing readers and Writers</h4><p>Whenever you are done with a reader or a writer you must close it by explicitly calling the <em>qeo_event_reader_close()</em> or <em>qeo_event_writer_close()</em> function respectively. This will release any resources associated with it. Readers and Writers must be closed before the Qeo Factory is closed. Failing to do so can lead to crashes and other problems. Make sure to close all Readers and Writers at all times.</p><p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

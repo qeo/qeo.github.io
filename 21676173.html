@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Tutorial: Creating the MediaEndPoint QDM</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Tutorial: Creating the MediaEndPoint QDM
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="Tutorial:CreatingtheMediaEndPointQDM-TheMediaEndpointTopic">The Media Endpoint Topic</h4><p><span>Let's reprise the </span><strong>Media Endpoint </strong><span>Topic. This is a producer or consumer of media files. In order to be able to clearly describe this topic, we also need to describe its </span><span>properties:</span></p><div class="table-wrap"><table class="confluenceTable"><tbody><tr><th class="confluenceTh">Property</th><th class="confluenceTh">Description</th><th class="confluenceTh">Type</th></tr><tr><td class="confluenceTd"><strong>id</strong></td><td class="confluenceTd">Unique ID of the media endpoint</td><td class="confluenceTd">String. We want to uniquely identify each Media EndPoint with the content of this string.</td></tr><tr><td class="confluenceTd"><strong>type</strong></td><td class="confluenceTd">describes whether the endpoint is a producer or consumer of media</td><td class="confluenceTd">String equal to &quot;SOURCE&quot; or &quot;SINK&quot;</td></tr><tr><td class="confluenceTd"><strong>capabilities</strong></td><td class="confluenceTd">Describes the supported media types, codecs and transports</td><td class="confluenceTd">String (MIME)</td></tr><tr><td colspan="1" class="confluenceTd"><strong>deviceId</strong></td><td colspan="1" class="confluenceTd">Device identity representing the qeo device</td><td colspan="1" class="confluenceTd">DeviceId (standard Qeo ID format)</td></tr></tbody></table></div><p><span> </span><span>The diagram below shows the structure of the topic:</span></p><p><img class="confluence-embedded-image" width="300" src="attachments/21676180/21958627.jpg" data-image-src="attachments/21676180/21958627.jpg"></p><h4 id="Tutorial:CreatingtheMediaEndPointQDM-Step1:CreatingtheModuleDescription">Step 1: Creating the Module Description</h4><p>First of all, we will create a module in which to contain our data structure. We represent this with the &lt;module&gt; element. The module element must be encapsulated in the &lt;types&gt; element.</p>    <div class="aui-message warning shadowed information-macro">
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>Although in theory it is possible to declare multiple modules inside a single XML file, the current version of the code generator does not support this yet. For now, we will therefore not do this.</p>
+                    </div>
+    </div>
+<p><span style="font-size: 10.0pt;line-height: 13.0pt;">We put only a single module in the XML file. the module name is &quot;media&quot;.</span></p><p>Namespaces depend on the manufacturer. For Technicolor, we use two namespaces:</p><ul><li><p><strong>org::qeo </strong> for standardized QDMs</p></li><li><p><strong>com::technicolor</strong> for non-standard Technicolor QDMs. </p></li></ul><p>Suppose we are creating a standard The namespace is therefore <em>org::qeo</em>.</p><p>Since we want to use previously described data models, specifically <em>DeviceID</em>, we need to include the xml file that describes these models (<em>qeo_types.xml</em>).  This results in the following XML structure:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;types xmlns=&quot;http://www.qeo.org/formal/2013/Qeo_Data_Model&quot; version=&quot;0.1&quot;&gt;
+        &lt;include file=&quot;qeo_types.xml&quot;/&gt;
+        &lt;module name=&quot;org::qeo::media&quot;&gt;
+ 
+ 
+ 
+       &lt;/module&gt;
+&lt;/types&gt;</pre>
+</div></div><h4 id="Tutorial:CreatingtheMediaEndPointQDM-Step2:CreatingaStruct">Step 2: Creating a Struct</h4><p>Now that we have a module, we can add a struct. A &lt;struct&gt; element has two possible attributes: </p><ul><li><p><strong>name:</strong> name of the struct. We use &quot;Endpoint&quot; in the example.</p></li><li><p><strong>behavior (optional):</strong> how the data type represented by the struct behaves (state or event). In the example, the media endpoint behaves as state.</p></li></ul><p>The QDM now becomes:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;types xmlns=&quot;http://www.qeo.org/formal/2013/Qeo_Data_Model&quot; version=&quot;0.1&quot;&gt;
+        &lt;include file=&quot;qeo_types.xml&quot;/&gt;
+        &lt;module name=&quot;org::qeo::media&quot;&gt;
+            &lt;struct name=&quot;Endpoint&quot; behavior=&quot;state&quot;&gt;
+ 
+            &lt;/struct&gt;
+       &lt;/module&gt;
+&lt;/types&gt;</pre>
+</div></div><h4 id="Tutorial:CreatingtheMediaEndPointQDM-Step3:CreatingtheMembers">Step 3: Creating the Members</h4><p>Next, we want to represent properties of the media enpoint entity using the <em>&lt;member&gt;</em> element inside the mediaEnpoint <em>&lt;struct&gt;</em> element. The <em>&lt;member&gt;</em> element has the following possible attributes:</p><ul><li><p><strong>name</strong>: name if the member</p></li><li><p><strong>type</strong>: the type of the member. This can be either one of the supported basic types (string, boolean, int8, int16, int32, int64, float) or non-basic</p></li><li><p><strong>nonBasicTypeName</strong> (optional): used to indicate the name of the non-basic type if the value for type is not a basic type. </p><p>When referring to a type defined in the same XML file, you can use the regular, short name. However, when referring to a type created in a different XML, you need to use the fully qualified name with the complete namespace. </p></li><li><p><strong>sequenceMaxLength</strong> (optional): used to indicate a sequence of types. The only value allowed is -1, indicating a sequence of indeterminate length. If this attribute is not declared, the member is a single value instead of a sequence.</p></li><li><p><strong>key</strong>: indicates that this member is a key member. This means that the instance of the data type can be completely identified by the value of this member. The default value for this attribute is false. Since this example is State behaviour, the key field is mandatory and the value must be set to <em>true</em>.</p></li></ul>    <div class="aui-message warning shadowed information-macro">
+                    <p class="title">About SequenceMaxLength</p>
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>As &quot;member&quot; is a sequence. There can be any number of members. We use the <em>sequenceMaxLength</em> attribute to indicate this. Since Qeo only supports unlimited sequences at this point, we define the value of this attribute as -1. other values are not allowed (for now).</p>
+                    </div>
+    </div>
+<p><span style="font-size: 10.0pt;line-height: 13.0pt;">The table above shows us which members we need to define: </span><em style="font-size: 10.0pt;line-height: 13.0pt;">id</em><span style="font-size: 10.0pt;line-height: 13.0pt;">, </span><em style="font-size: 10.0pt;line-height: 13.0pt;">type</em><span style="font-size: 10.0pt;line-height: 13.0pt;">, </span><em style="font-size: 10.0pt;line-height: 13.0pt;">capabilities</em><span style="font-size: 10.0pt;line-height: 13.0pt;"> and </span><em style="font-size: 10.0pt;line-height: 13.0pt;">deviceID</em><span style="font-size: 10.0pt;line-height: 13.0pt;">. The latter has a non-basic type, specifically </span><em style="font-size: 10.0pt;line-height: 13.0pt;">DeviceID</em><span style="font-size: 10.0pt;line-height: 13.0pt;">. The </span><em style="font-size: 10.0pt;line-height: 13.0pt;">DeviceID</em><span style="font-size: 10.0pt;line-height: 13.0pt;"> </span><em style="font-size: 10.0pt;line-height: 13.0pt;">struct</em><span style="font-size: 10.0pt;line-height: 13.0pt;"> is described in the </span><em style="font-size: 10.0pt;line-height: 13.0pt;">qeo_types.xml</em><span style="font-size: 10.0pt;line-height: 13.0pt;"> file we included. The id member is a key member. This results in the following XML file:</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;types xmlns=&quot;http://www.qeo.org/formal/2013/Qeo_Data_Model&quot; version=&quot;0.1&quot;&gt;
+        &lt;include file=&quot;qeo_types.xml&quot;/&gt;
+        &lt;module name=&quot;org::qeo::media&quot;&gt;
+            &lt;struct name=&quot;Endpoint&quot; behavior=&quot;state&quot;&gt;
+                &lt;member name=&quot;id&quot; type=&quot;string&quot; key=&quot;true&quot;&gt;
+                &lt;/member&gt;
+                &lt;member name=&quot;type&quot; type=&quot;string&quot;&gt;
+                &lt;/member&gt;
+                &lt;member name=&quot;capabilities&quot; type=&quot;string&quot;&gt;
+                &lt;/member&gt;
+                &lt;member name=&quot;deviceId&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::DeviceId&quot;&gt;
+                &lt;/member&gt;
+            &lt;/struct&gt;
+       &lt;/module&gt;
+&lt;/types&gt;</pre>
+</div></div><p>For</p><h4 id="Tutorial:CreatingtheMediaEndPointQDM-Step4:DocumentingourQDM">Step 4: Documenting our QDM</h4><p>In order to be able to easily reuse the QDM, or for others to use it, we need to document it. For this, we can insert &lt;doc&gt; elements in every level. Thus, we get our final QDM file:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;types xmlns=&quot;http://www.qeo.org/formal/2013/Qeo_Data_Model&quot; version=&quot;0.1&quot;&gt;
+        &lt;include file=&quot;qeo_types.xml&quot;/&gt;
+        &lt;module name=&quot;org::qeo::media&quot;&gt;
+            &lt;struct name=&quot;Endpoint&quot; behavior=&quot;state&quot;&gt;
+                &lt;member name=&quot;id&quot; type=&quot;string&quot; key=&quot;true&quot;&gt;
+                    &lt;doc&gt;Unique ID of the media endpoint &lt;/doc&gt;
+                &lt;/member&gt;
+                &lt;member name=&quot;type&quot; type=&quot;string&quot;&gt;
+                    &lt;doc&gt;SOURCE (producer) or SINK (consumer)&lt;/doc&gt;
+                &lt;/member&gt;
+                &lt;member name=&quot;capabilities&quot; type=&quot;string&quot;&gt;
+                    &lt;doc&gt;Describes in a &#39;Internet media type&#39;-way (MIME) the supported media types, 
+                         codecs and transports e.g: content-type:application/sdp and the sdp can 
+                         describe the supported codecs and transports&lt;/doc&gt;
+                &lt;/member&gt;
+                &lt;member name=&quot;deviceId&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::DeviceId&quot;&gt;
+                    &lt;doc&gt;Device Id of the DeviceInfo datamodel&lt;/doc&gt;
+                &lt;/member&gt;
+            &lt;/struct&gt;
+       &lt;/module&gt;
+&lt;/types&gt;</pre>
+</div></div>    <div class="aui-message warning shadowed information-macro">
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>While you can define multiple structs inside a single XML file, this is not mandatory. You can create a separate QMD file for separate data types or group them as you see fit. Note, however, that since the current version of the Code Generator does not support multiple modules inside a single XML file, all of the structs in the same XML need to be in the same module.</p>
+                    </div>
+    </div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

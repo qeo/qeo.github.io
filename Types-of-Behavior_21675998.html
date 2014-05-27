@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Types of Behavior</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-System-Description_21675993.html">Qeo System Description</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Exploring-Qeo-Concepts_21675997.html">Exploring Qeo Concepts</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Types of Behavior
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 class="BlockLabel" id="TypesofBehavior-QeoBehaviorTypes">Qeo Behavior Types</h1><p>From a Qeo point of view, there are only two types of information: <em>State</em> and <em>Event</em>. Every Qeo Topic is associated with one of those information types, and the information type defines the Behavior of the Topic, i.e. the contract to which the middleware adheres with respect to information published on the Topic.</p><h1 class="BlockLabel" id="TypesofBehavior-State">State</h1><h4 id="TypesofBehavior-AboutStates">About States</h4><p>State Topics are used to represent the current state of (physical or logical) entities in the domain. Different kinds of entities are modelled as different data types, and hence as different Qeo Topics. </p><p>Within a single Topic, there may be multiple instances of the same kind of entity. These are distinguished by their respective values for the Key fields of that Topic.</p><h4 id="TypesofBehavior-InstanceLifeCycle">Instance Life Cycle</h4><p>Instances have a life cycle: they spring into existence the first time a publisher publishes a value for this instance (i.e. this specific combination of Key field values), subsequent publications for the instance update the globally visible instance state, and finally instances disappear either because they were explicitly removed by their publisher, or because their publisher itself disappears.</p><h4 id="TypesofBehavior-Localcacheandupdates">Local cache and updates</h4><p>For each Subscriber, Qeo maintains a local cache reflecting the contents of the Topic. Subscribers may iterate through, or perform lookups in, this cache. The local cache is a Subscriber's interface to the Topic. Local caches are update asynchronously by Qeo, and Subscribers can choose to receive one of two kinds of update notifications:</p><p class="BulletedList1"><strong>▪    </strong>A simple &quot;something changed&quot; notification. This is useful for Subscribers that treat their local cache as a kind of lazy shared memory, where they perform lookups on an as-needed basis.</p><p class="BulletedList1"><strong>▪    </strong>A more elaborate notification that triggers a callback for each changed instance, providing the current instance state. This is more useful for Subscribers that implement a state machine based on the updates of the global state of one or more Topics.</p><h4 id="TypesofBehavior-Contract">Contract</h4><p>State Topics abide by the following contract:</p><p class="BulletedList1"><strong>▪    </strong>Every instance is, at any point in time, exclusively owned by a single publisher. Over time, the actual owner of a particular instance may change, but there will never be two Publishers at the same time that can publish updates for a given instance.</p><p class="BulletedList1"><strong>▪    </strong>Subscribers will eventually know the latest value for each instance on the Topic. This is true even if this latest value was published before the Subscriber subscribed to the Topic.</p><p class="BulletedList1"><strong>▪    </strong>Subscribers will not be aware of any instances that had already disappeared before they subscribed to the Topic.</p><p class="BulletedList1"><strong>▪    </strong>Subscribers will not necessarily be notified of every individual update to an instance's value: when updates occur in rapid succession, a Subscriber may only see the aggregated result of the updates.</p><p class="BulletedList1"><strong>▪    </strong>There is no global synchronization between Subscriber's local caches: there are no guarantees that all Subscribers will have the exact same view on the Topic at a given point in time. When the Topic has been stable for a sufficiently long time (i.e. the latest publications for all instances have been propagated to all Subscribers), the contents of all local caches will eventually line up.</p><h1 class="BlockLabel" id="TypesofBehavior-Event">Event</h1><h4 id="TypesofBehavior-AboutEvents">About Events</h4><p>Event Topics are used to model discrete events. Whereas State Topics model facts that hold true for a longer period of time (e.g. whether a door is open or closed), Event Topics model facts that occur at a particular point in time (e.g. someone is passing through the door). A single Event Topic models a single kind of event that can occur in the system.</p><p>Event Topics do not hold separate instances: they just represent a continuous stream of events. Hence, Event data types have no Key fields. Of course, the fields that are in the Event data type can be used to distinguish events on a more detailed level (e.g. &quot;person X passed through door Y&quot;), but this is an application concern: the middleware itself does not interpret event publications to that level of detail.</p><h4 id="TypesofBehavior-NoLocalCache">No Local Cache</h4><p>Event Subscribers will not hold a local cache of events. Rather, they will be notified immediately upon arrival of an event of that event's value. It is up to the application writer to store events for later processing or retrieval if there is a need for this kind of functionality.</p><h4 id="TypesofBehavior-Contract.1">Contract</h4><p>Event Topics abide by the following contract:</p><ul><li class="BulletedList1">Events published before a Subscriber subscribed to the Topic are lost to that Subscriber.</li><li class="BulletedList1">Once the subscription is made, and the subscription has been propagated to all Publishers, a Subscriber will reliably receive all events on this Topic.</li><li class="BulletedList1">Every Subscriber will only be notified of every event once.</li><li class="BulletedList1">Events have partial ordering: publications coming from the same publisher will arrive in the order of publication, but there is no guarantee with respect to the ordering of events that were published by different Publishers. This means that not every Subscriber will see all events arriving in the same order.</li></ul>    <div class="aui-message hint shadowed information-macro">
+                            <span class="aui-icon icon-hint">Icon</span>
+                <div class="message-content">
+                            <p>In any distributed system, there is some communication latency. Because of this latency, it may take a small amount of time for a Subscriber to be discovered by all relevant Publishers. During this time window, publications on the Topic may be lost to the Subscriber.</p><p>The reverse is also true: when a new Publisher starts, it takes some time to discover all relevant Subscribers. If the Publisher writes some events to the Topic before all Subscribers have been discovered, these events will go lost on the as-yet-undiscovered Subscribers.</p><p>Fortunately, the time windows involved are very small (on the scale of milliseconds).</p><p>Take this into account when designing your system: it does not make sense to create a short-lived publisher (e.g. a process that starts up, publishes one event and immediately shuts down). The reliability of event distribution is only guaranteed in steady-state operation.</p>
+                    </div>
+    </div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

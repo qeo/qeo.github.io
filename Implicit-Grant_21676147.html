@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Implicit Grant</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API_21676144.html">REST API</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Using-OAuth-2.0-to-Access-Qeo-Rest-API_21676145.html">Using OAuth 2.0 to Access Qeo Rest API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Implicit Grant
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="ImplicitGrant-AboutImplicitGrant">About Implicit Grant</h4><p>In the Implicit Grant type of OAuth, the client immediately receives an access token that can be used to access the web resource. Once the token is expired, the user will need to log in again to have further access to the web resource. More details on the implicit grant flow can be found in Section 4.2 of <a href="http://tools.ietf.org/html/rfc6749#section-4.2" class="external-link" rel="nofollow">RFC 6749</a>.</p><h4 id="ImplicitGrant-High-LevelFlow">High-Level Flow</h4><p>Below is the flowchart for the Implicit Grant type of OAuth2.0:<span> </span></p><p><img class="confluence-embedded-image" src="attachments/21676147/21958618.png" data-image-src="attachments/21676147/21958618.png"></p><h4 id="ImplicitGrant-Tokens">Tokens</h4><p>The client immediately receives an <strong>access token</strong> that can be used to access the Rest API. Once this token expires, the user needs to authenticate itself before the client can access the Rest API again.</p><h4 id="ImplicitGrant-DetailedFlow">Detailed Flow</h4><p><span style="color: rgb(34,34,34);">All applications follow the same basic pattern when accessing the Qeo Rest API using OAuth 2.0. At a high level, using OAuth 2.0 to access the Qeo Rest API consists of these general steps, the numbers between brackets corresponding with the steps of the OAuth 2 process in the diagram above: </span></p><ol><li><span style="color: rgb(34,34,34);">Register the application (done once) (refer to <em>Step 1</em> below)<br /> </span></li><li><span style="color: rgb(34,34,34);">Obtain an access token from the OAuth 2 Authorization server:</span><ol><li><span style="color: rgb(34,34,34);">Token request to the server (1)</span></li><li><span style="color: rgb(34,34,34);">User login and consent (2)</span></li><li><span style="color: rgb(34,34,34);">Return of access token by the server (3)<br /></span></li></ol></li></ol><h4 id="ImplicitGrant-Step1:RegisteryourApplication">Step 1: Register your Application</h4><p>This needs to be done only once. All applications that want to access the Qeo Rest API must be registered first. Currently registering your application is done by email (<a href="mailto:partnersalliancesupport@technicolor.com" class="external-link" rel="nofollow">partnersalliancesupport@technicolor.com</a>). In addition to a contact person and email, you will have to provide us the following information about your application:</p><div class="table-wrap"><table class="confluenceTable"><tbody><tr><th class="confluenceTh">Value</th><th class="confluenceTh">Description</th></tr><tr><td class="confluenceTd"><strong>application_name</strong></td><td class="confluenceTd">A user friendly way of representing your application to the user.</td></tr><tr><td class="confluenceTd"><strong>redirect_URI <strong><sup>(1)</sup></strong></strong></td><td class="confluenceTd">After authenticating the Oauth 2.0 Security Server, the browser of the user will be redirected to a URL. This URL must match the redirect_uri received by the registration process. </td></tr></tbody></table></div><p><span>You will get your personal client_id that you can use inside your application:</span></p><div class="table-wrap"><table class="confluenceTable"><tbody><tr><th class="confluenceTh">Value</th><th class="confluenceTh">Description</th></tr><tr><td class="confluenceTd"><strong>client_id</strong></td><td class="confluenceTd">A unique identifier for your application. This is considered as public information and must be provided in the URL when accessing the Oauth 2.0 Security Server.</td></tr></tbody></table></div>    <div class="aui-message hint shadowed information-macro">
+                            <span class="aui-icon icon-hint">Icon</span>
+                <div class="message-content">
+                            <p><sup>(1)</sup> For web applications, the redirect url must be the entry point of the application on which the user will be redirected after authentication. For other applications, it can be any uri that fit the application environment, like urn or custom uri scheme registered to start the application. <span style="background-color: transparent;font-size: 10.0pt;line-height: 13.0pt;">If the use case requires it, it is possible to have several uri registered for the application.</span></p>
+                    </div>
+    </div>
+<p> </p><h4 id="ImplicitGrant-Step2:ObtainanAccesscodefromtheOauth2AuthorizationServer">Step 2: Obtain an Access code from the Oauth2 Authorization Server</h4><p><span>Before your application can access the Qeo Rest API, it must obtain an access token that grants access to that API. A single access token may grant varying degrees of access to multiple APIs. </span></p><p>To obtain an access token, the user needs to be redirected to the authorization endpoint of the Security Management Server. This URL will present the user with a default OpenID selection page. The exact URL of this endpoint can be discovered in the <a href="Qeo-Root-Resource_21676148.html">Qeo Root Resource</a> of the server, under &quot;oauth&quot; &gt; &quot;authorization&quot; &gt; &quot;href&quot;.</p><p><span>Your application must provide the following parameters:</span></p><div class="table-wrap"><table class="confluenceTable"><tbody><tr><th class="highlight-grey confluenceTh" data-highlight-colour="grey">Parameter</th><th class="confluenceTh">Value</th><th class="confluenceTh">Description</th></tr><tr><td class="confluenceTd"><strong>response_type</strong></td><td class="confluenceTd">token</td><td class="confluenceTd">Indicates that the response will be an access token.</td></tr><tr><td class="confluenceTd"><strong>client_id</strong></td><td class="confluenceTd">The client ID obtained from the previous step.</td><td class="confluenceTd"><span style="color: rgb(34,34,34);">Indicates the client that is making the request. The value passed in this parameter must exactly match the client ID received in step 1.</span></td></tr><tr><td class="confluenceTd"><strong>redirect_uri</strong></td><td class="confluenceTd">The redirect URI obtained from the previous step.</td><td class="confluenceTd"><span style="color: rgb(34,34,34);">Determines where the response is sent. The value of this parameter must exactly match the redirect uri from step 1 (including the http or https schemes, case, and trailing '/').</span></td></tr></tbody></table></div><p>In addition to the mandatory OAuth parameters, the authorization request can contain the OpenID selection parameter. If provided, the default OpenID selection page won't be displayed. Instead the user will directly be redirected to the selected OpenId provider.</p><div class="table-wrap"><table class="confluenceTable"><tbody><tr><th class="confluenceTh">Paremeter</th><th class="confluenceTh">Value</th><th colspan="1" class="confluenceTh">Description</th></tr><tr><td colspan="1" class="confluenceTd"><strong>opIdentifier</strong></td><td colspan="1" class="confluenceTd">The discovery URL of the OpenID identifier.</td><td colspan="1" class="confluenceTd">This can be any OpenID 2.0 compliant provider.</td></tr></tbody></table></div><p><span style="color: rgb(0,0,0);">The user will be redirected to a login page requesting the credentials of the user. Once the user has filled in his credentials, his browser will be redirected to the redirect_uri. The url where it is redirected to also gets a query string in its url containing an access token.</span></p><h4 id="ImplicitGrant-Step3:ProvidetheAccessTokentotheQeoRestAPI">Step 3: Provide the Access Token to the Qeo Rest API</h4><p><span>After your application has obtained an access token, it can access the Qeo Rest API by including it in an </span><code>Authorization: Bearer</code><span> HTTP </span><span>header.</span></p><h4 id="ImplicitGrant-Example">Example</h4><p><span style="color: rgb(34,34,34);">A company named <strong>example.org</strong> wants to create their own web application for managing their Qeo Realms.</span></p><ol><li><p><span style="color: rgb(34,34,34);">They must first send an email to <a href="mailto:partnersalliancesupport@technicolor.com" class="external-link" rel="nofollow">partnersalliancesupport@technicolor.com</a> with the following information:<br /><br /></span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">application_name: Example Qeo Web
+redirect_URI:  http://qeo.example.org</pre>
+</div></div><p><span style="color: rgb(34,34,34);"><br /><span>This means that the Security Server will only redirect to URLs starting with </span><em><span><span><a href="http://qeo.example.org" class="external-link" rel="nofollow">http://qeo.example.org</a></span></span></em><span>. For example </span><em><span><span><a href="http://qeo.example.org/index.php" class="external-link" rel="nofollow">http://qeo.example.org/index.php</a></span></span></em><span> will do, but </span><em><span><span><a href="http://www.example.org/" class="external-link" rel="nofollow">http://www.example.org/</a></span></span></em><span> will not.<br /></span><br /></span></p></li><li><p>After the application is approved they receive a mail from Technicolor, containing:<br /><br /></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">client_id: 2Xc6zKMNu2R3nuK6DQfho6be2F4U6M3m
+client_secret: Nq397Y7n563r9ugp5m2O9LP3s01U8Dx8</pre>
+</div></div></li><li><p>Now they can start building their web application. The first step is to add a link to the authorization endpoint providing the necessary client_id and redirect_uri:<br /><br /></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;a href=&quot;https://my.qeo.org/qeo-rest-security/oauth/authorize?response_type=token&amp;client_id=2Xc6zKMNu2R3nuK6DQfho6be2F4U6M3m&amp;redirect_uri=http://qeo.example.org&quot;&gt;Click here to login!&lt;/a&gt;</pre>
+</div></div></li><li><p>When the user clicks this link the browser is redirected to a Google login page asking the user to login with his Google credentials. This information is NEVER given to the web application, which is the main advantage of using OpenID/OAuth2.0 for authentication. </p><p><br />If it is the first time that the user is logged in this application he is asked whether he wants to trust this application. If the user clicks <strong>Accept</strong> he is redirected to:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">http://qeo.example.org#access_token=2YotnFZFEjr1zCsicMWpAA&amp;expires_in=3600</pre>
+</div></div><p>On subsequent logins, this check is skipped since the application already has the trust information, and the user is immediately redirected to the above URL.<br /><br /></p><p>The web application located at <em><a href="http://qeo.example.org" class="external-link" rel="nofollow">http://qeo.example.org</a></em> will be able to fetch the GET parameters from the request and extract the access token.</p><p> </p></li><li><p>Now the<em> qeo.example.org </em>application has an access_token that can be used for accessing the Qeo Rest API. For example if the application wants to display all Realms belonging to the user it will send a GET request containing the access_token in its header:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">GET /v1/realms HTTP/1.1
+Authorization: Bearer 2YotnFZFEjr1zCsicMWpAA
+Host: my.qeo.org</pre>
+</div></div></li></ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676147/21958618.png">image2014-3-4 11:16:56.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

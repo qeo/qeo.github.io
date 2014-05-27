@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : C</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Developer-Guide_21676089.html">Qeo Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Miscellaneous-Topics_21676110.html">Miscellaneous Topics</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Fine-Grained-Policy-API_21676115.html">Fine-Grained Policy API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : C
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created and last modified by <span class='author'> lissensj</span> on May 26, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="C-UsingTheAPI">Using The API</h4><p>During the creation of a Qeo reader or writer you can optionally specify an <em>on policy update</em> callback method.  If the callback is specified then Qeo will call it:</p><ol><li>When creating the reader or writer,</li><li>Whenever a Qeo Policy update is received,</li><li>When requesting a Qeo Policy re-evaluation (see below).</li></ol><p>When the callback method gets called:</p><ol><li>It will receive a Qeo Policy <em>identity</em>.</li><li>It should decide whether it will <em>allow</em> or <em>deny</em> the provided identity from being read from or written to.</li></ol><p>The callback will be called:</p><ol><li>Once for each user (identity) to whom you're allowed to communicate in your realm. This is defined by the policy of the realm.</li><li>Once with a null identity to signal that the end of the Qeo Policy was reached. </li></ol><p>In some cases an application may want to reconsider a decision made earlier on whom to allow or deny for a certain reader or writer.  For this reason each entity also has a <em>policy update</em> method that allows the application to request a re-evaluation of the Qeo Policy.  When calling this method the <em>on policy update</em> callback will be called again for each relevant identity in the Qeo Policy.</p><h4 id="C-Theon_policy_updateCallback">The on_policy_update Callback</h4><p>The following arguments are passed to the callback:</p><ul><li>The reader or writer on which the callback is triggered,</li><li>A Qeo Policy identity,</li><li>The user data that was provided during reader or writer creation.</li></ul><p>The callback should return one off:</p><ul><li><strong>QEO_POLICY_ALLOW</strong> to allow the provided identity from being read from or written to.</li><li><strong>QEO_POLICY_DENY</strong> to deny the provided identity from being read from or written to.</li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">//callback for a qeo_event_writer_t.
+static qeo_policy_perm_t on_policy_update(const qeo_event_writer_t *writer,
+                                          const qeo_policy_identity_t *identity,
+                                          uintptr_t userdata)
+{
+    return QEO_POLICY_ALLOW;
+}</pre>
+</div></div><h4 id="C-Registrationofthelistenerduringreader/writercreation">Registration of the listener during reader/writer creation</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">//listener structure
+static qeo_event_writer_listener_t _wl = { on_policy_update };
+
+//registering the listener structure
+msg_writer = qeo_factory_create_event_writer(qeo, my_qeo_type, &amp;_wl, 0);</pre>
+</div></div><p>Note: the reader/writer creation will block untill all the on_policy_update callbacks for that reader/writer are handled. This ensures the reader/writer can only be used after the correct policies are set.</p><h4 id="C-Forcingapolicyupdate">Forcing a policy update</h4><p>If you want to change a policy, you need to request an update in order for the on_policy_update callback to be called again</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">//trigger an update for an event writer
+qeo_event_writer_policy_update(writer);</pre>
+</div></div><p>Note: this call will block until all the on_policy_update callbacks are handled.</p><p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

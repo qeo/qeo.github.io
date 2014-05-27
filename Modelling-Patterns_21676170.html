@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Modelling Patterns</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Best-Practices_21676166.html">Best Practices</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Modelling Patterns
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="ModellingPatterns-AvoidRPC-likeInteractions">Avoid RPC-like Interactions</h4><p>The Remote Procedure Call (RPC) interaction model seems very natural to use when designing a distributed system. After all, it closely mirrors the traditional procedure call mechanism one uses when developing non-distributed systems. In fact, an RPC-like request-response interaction model can be trivially implemented on top of Qeo's publish-subscribe framework. We advise you, however, not to go down this route when designing your data model.</p><p>A thorough discussion of the shortcomings of the RPC model is out of scope for this document, but for the sake of argument we refer here to the well-known <a href="http://en.wikipedia.org/wiki/Fallacies_of_Distributed_Computing" class="external-link" rel="nofollow">Fallacies of Distributed Computing</a>. The RPC model embodies at least three of these eight fallacies:</p><ul><li>The network is reliable.</li><li>Latency is zero.</li><li>Topology doesn't change.</li></ul><p>The Observer and Directed State patterns described below offer an alternative modelling strategy that fits better onto Qeo's publish-subscribe nature than RPCs do.</p><h4 id="ModellingPatterns-BasicPatterns">Basic Patterns</h4><h5 id="ModellingPatterns-ObserverPattern">Observer Pattern</h5><p>It is better to model systems in Qeo as a set of reactive components, where each component publishes its own state, and components <em>observe</em> the global state (the part that is of interest to them) and <em>react</em> to changes in the global state by evolving their local state (this may involve computation, or altering the physical state of an entity &quot;owned&quot; by this component - e.g. opening a valve in an industrial control system), and then publishing their own local state back in the Qeo cloud. This is called the <strong>Observer Pattern</strong>: components do not directly &quot;push&quot; other components to do something, rather they observe other components and react on their observations by altering their own state. The component publishing state is called the <strong>Subject</strong>, the subscribing components are called <strong>Observer</strong><strong>s.</strong></p><p><strong><img class="confluence-embedded-image image-center" src="attachments/21676167/21958620.jpg" data-image-src="attachments/21676167/21958620.jpg"></strong></p><p style="text-align: center;"><strong>Observer Pattern</strong></p><h5 id="ModellingPatterns-DirectedStatePattern">Directed State Pattern</h5><p>How can this approach now avoid the RPC pattern? We will still be confronted with situations where one component (A) not only wants to observe some other component's (B) state, but also wants to drive this state forward. The key insight here is that A's desire to drive B's state forward can also be considered as a part of A's state. Hence, instead of directly sending a message to B stating &quot;open the valve&quot;, A publishes the state &quot;I desire the valve controlled by B to be open&quot;, while B subscribes to this topic (and hence observes A's <em>desired</em> state). B can now, based on the desires it observes in the Qeo cloud, decide whether or not to open the valve. This pattern is called the <em>Directed State Pattern</em>. In this pattern, component A plays the role of <em>Requester</em>, while component B plays the role of <em>Effector</em>. The Effector is the Subject of the <em>Current</em> <em>State</em>, and the Observer of the <em>Desired State</em>. The Requester is the Subject of the Desired State and the Observer of the Current State.</p><p style="text-align: center;"><img class="confluence-embedded-image" src="attachments/21676167/21958619.jpg" data-image-src="attachments/21676167/21958619.jpg"> <br /><strong>Directed State Pattern</strong></p><p>On the surface, the Directed State Pattern is just a roundabout way for doing an RPC, but there are definitely differences between the two approaches:</p><ul><li>Instead of one bidirectional exchange, there are two unidirectional communications in this pattern. This means that it is less easy to propagate back an error code when a requested change is not possible. Rather, the Requester must observe the Effector, and conclude that the Current State does not evolve according to its wishes. </li><li>There is no hard coupling between the Requester and the Effector: it is quite possible to formulate Desired State in such a way that it is not directed towards any specific component, and as such it may be possible that some other component C, which can also observe the Desired State, decides to drive its own state forward as a result of the publication done by A. In this way, fault tolerance can be built into the system (other components pick up the work if B is non-responsive), or new behaviors may be added to the system without breaking old components (C is developed later than A and B and implements an additional behavior the other two don't know about).</li><li>Because the Requester's wishes are expressed in a data-oriented way (essentially, the Requester is saying &quot;I would like your state to evolve towards this end goal&quot;), the purpose-specific messages of the RPC pattern are avoided. There is one generic way to express any action the Requester wishes the Effector to undertake.</li></ul><h4 id="ModellingPatterns-PracticalPatterns">Practical Patterns</h4><h5 id="ModellingPatterns-The&quot;IamXandIhaveY&quot;pattern">The &quot;I am X and I have Y&quot; pattern</h5><p>In many cases, a publishing component needs to provide two kinds of information to the outside world:</p><ul><li>its identity: a unique way to identify exactly this publisher, and its particular properties</li><li>its knowledge: the state of the real-world objects managed by this publisher</li></ul><p>For example, a data model for wifi access points will provide information on</p><ul><li>the access point itself (the identity): supported wifi technologies, SSID, MAC address, etc.</li><li>the wireless clients associated with the access point (the knowledge): which devices are associated, what are their MAC addresses, link statistics, etc.</li></ul><p>The most natural way to present this information on Qeo is to break it down into 2 separate topics:</p><ul><li>the <strong>Identity</strong> topic (a <em>state</em> topic) is used to advertise the presence of a publishing component, and to describe its properties. Typically, each publishing component publishes one instance on this topic.</li><li>the <strong>Knowledge</strong> topic (a <em>state</em> topic) is used to advertise the publishing component's knowledge about the objects it manages. Typically, each object managed by the publishing component gets its own instance on this topic. The instances on this topic have a member field that references back to the key of the Identity topic, so that it is clear to which publishing component a given object on the Knowledge topic belongs.</li></ul><p>This pattern follows directly from a Third Normal Form decomposition of the data model.</p><h5 id="ModellingPatterns-The&quot;Tellmewhatyou&#39;reinterestedin&quot;pattern">The &quot;Tell me what you're interested in&quot; pattern</h5><p>You have some information to share, but</p><ul><li>it's expensive (in terms of energy, processing power, ...) to gather this information. You only want to gather and publish the information when you're certain someone is interested.</li><li>you can supply information at different rates (e.g. a component that publishes network interface statistics), but it is unknown upfront what publishing rate your subscribers are actually interested in.</li></ul><p>This problem can be solved with a variation of the Directed State pattern. In this context, the Current State topic is called the <strong>Information</strong> topic, and the Desired State topic is called the <strong>Interest</strong> topic. Information consumers express their interest in a given kind of information, at a given publishing rate, on the Interest topic. This is a <em>state</em> topic. The convention is that, as long as a consumer is interested in the information, it maintains an instance on this topic. When the consumer removes the instance from the topic, this signals that it is no longer interested in the information. The information provider subscribes to the Interest topic, and learns about the interests of the existing consumers. It can then decide what information to publish, and at what rate. The information itself is published on the Information topic. The Information topic can be either a <em>state</em> or an <em>event</em> topic, depending on the particular application.</p><p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Device Registration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Introduction-to-Qeo-Security_21676007.html">Introduction to Qeo Security</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Device Registration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created and last modified by <span class='author'> lissensj</span> on May 26, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="DeviceRegistration-Purpose"><strong>Purpose</strong></h4><p>The main<strong> </strong>purpose of Registration in Qeo is to ensure that only authorized Qeo identities (users and devices) get access to the information in the Qeo Realm.</p><h4 id="DeviceRegistration-Qeoidentity">Qeo identity</h4><p>As a recap, the SMS manages a realm to contain users, where each user can have one or more devices attached. A Qeo &quot;identity&quot; must have a certificate, such it can be authenticated and authorized, and is assigned to the user and the device :</p><ul><li>A multi-user device will be given a certificate for every user that uses that device.</li><li>If a user owns multiple devices, each device will be given another certificate.</li></ul><p>For registration in Qeo we use 'signed' certificates.  A certificate based mechanism has some advantages : it allows fine-grained management, contains user and device information, and allows mutual authentication between Qeo identities without the need of a central authority or distribution of credentials.</p><h4 id="DeviceRegistration-Prerequisite">Prerequisite</h4><p>While Qeo can function without an Internet connection, it is required for the registration process to complete successfully. During the process, the User's device and the Realm Administrator need to be able to access the Security Management Server.</p><h4 id="DeviceRegistration-RegistrationApproaches">Registration Approaches</h4><p><span style="color: rgb(0,0,0);">There are two approaches to authenticating devices:</span></p><ul><li><span style="color: rgb(0,0,0);"><strong>Direct Registration:</strong> <br />In this case you have direct access to the device you want to register. There are two ways of doing this:<br /><br /></span><ul><li><span style="color: rgb(0,0,0);">The Easy Install feature of the Qeo Service for Android allows you to create a home Realm (QeoHome) and automatically add your device to it. <br /><br /></span></li><li><span style="color: rgb(0,0,0);">Advanced direct registration where you can select the name of the Realm, generate an OTC and register devices. You will either need the assistance of the Realm Administrator or be one yourself. <br /> </span></li></ul></li><li><span style="color: rgb(0,0,0);"><strong>Remote Registration:<br /></strong>In this case you have no direct contact with the device to register or it ia a so called &quot;headless&quot;  device, which means it has no direct user interface. Typically, the device will approve or reject subscription to a certain Qeo Realm, or is programmed to do so when certain conditions occur (e.g. a registration button is pressed).</span></li></ul><p><span style="color: rgb(0,0,0);">A special case of the latter is registration of headless devices. A </span> <em>headless device<strong> </strong> </em><span style="color: rgb(0,0,0);">is a computer system or device that has been configured to operate without a monitor (the missing &quot;head&quot;), keyboard, and mouse. A headless system is typically controlled via a network connection, although some headless system devices require a physical connection to be made</span><span style="color: rgb(0,0,0);"> for administration of the device. Typically, users do not interact with these devices or use proprietary software on a dedicated system. Qeo allows interaction with these devices over any platform. In this case, approval is implicit and no Qeo user interaction is needed to confirm registration. </span></p><h4 id="DeviceRegistration-Actors"><strong>Actors</strong></h4><p>The following actors participate in this procedure:</p><ul><li><strong>Realm Administrator:</strong> creates a Realm on the SMS, adds Users to his Realm, adds device(s) to a user and distributes One Time Codes to a User to register a device to his Realm.</li><li><strong>User:</strong> registers a device using a One Time Code generated by the SMS and obtained via the Realm Administrator.</li><li><strong>SMS, RA, CA :</strong> the Security Management Server hosting a web service, the Registration Authority and Certificate Authority.</li></ul><h4 id="DeviceRegistration-Concepts">Concepts</h4><p>This process introduces the following concepts:</p><ul><li><p><span style="color: rgb(0,0,255);"><strong><span style="color: rgb(0,51,102);">One Time Code (OTC)</span>:</strong> </span>a code that is generated by the SMS, provided by the Realm Administrator to the user and that can be used by that User to register a device (for a user) to that Realm. This code is only valid for a short period of time.</p></li><li><p><span style="color: rgb(0,0,255);"><strong><span style="color: rgb(0,51,102);">(User) Device Certificate</span>:</strong> </span>a certificate that is used to verify whether a particular device for a particular user is a member of a Realm.</p></li></ul><h4 id="DeviceRegistration-Notes">Notes</h4><p>Take note of the following:</p><ul><li>A device needs to be registered only once for a particular User. Installing additional applications will not require any additional registration effort. </li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676008/21958410.jpg">process.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

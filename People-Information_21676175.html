@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : People Information</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="More-Examples_21676174.html">More Examples</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : People Information
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="PeopleInformation-AboutthisExample">About this Example</h4><p>This QDM represents information about people and the houses they own. <em style="font-size: 10.0pt;line-height: 13.0pt;">Basic Information Structure</em><span style="font-size: 10.0pt;line-height: 13.0pt;"> provides a model of the information we wish to represent.</span><em style="font-size: 10.0pt;line-height: 13.0pt;"> People QDM</em><span style="font-size: 10.0pt;line-height: 13.0pt;"> and</span><em style="font-size: 10.0pt;line-height: 13.0pt;"> House QDM</em><span style="font-size: 10.0pt;line-height: 13.0pt;"> provide the complete QDM code. The other topics highlight aspects and techniques used in these QDMs.</span></p><h4 id="PeopleInformation-BasicInformationStructure">Basic Information Structure</h4><p>Let us consider the following data structure:</p><p>For any individual, we represent the following information in a <em>people</em> data type:</p><ul><li><em>Name: </em>consisting of <span style="font-size: 10.0pt;line-height: 13.0pt;">first name, </span><span style="font-size: 10.0pt;line-height: 13.0pt;">middle name and l</span><span style="font-size: 10.0pt;line-height: 13.0pt;">ast name</span></li><li><em>Date of birth</em></li><li><em>Gender <br /></em></li><li><em>Mother <br /></em></li><li><em>Father</em></li><li><em>Spouse</em></li><li><em>Their home</em></li><li><em>The houses they own</em></li></ul><p>For the house, we represent the following information in a <em>house</em> data type:</p><ul><li><em>Address</em>: consisting of the street, the city, the zipcode, the state and the country</li><li><em>Owner</em></li></ul><h4 id="PeopleInformation-PeopleQDM">People QDM</h4><p>Below is the QDM representing the <em>people</em> information we want to exchange:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>people.xml</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;types xmlns=&quot;http://www.qeo.org/formal/2013/Qeo_Data_Model&quot; version=&quot;0.1&quot;&gt;
+  &lt;include file=&quot;qeo_types.xml&quot;/&gt;
+  &lt;module name=&quot;org::qeo::sample::people&quot;&gt;
+    &lt;struct name=&quot;Name&quot;&gt;
+      &lt;member name=&quot;first&quot; type=&quot;string&quot; /&gt;
+      &lt;member name=&quot;middle&quot; type=&quot;string&quot; sequenceMaxLength=&quot;-1&quot; /&gt;
+      &lt;member name=&quot;last&quot; type=&quot;string&quot; /&gt;
+    &lt;/struct&gt;
+    &lt;struct behavior=&quot;state&quot; name=&quot;Person&quot;&gt;
+      &lt;member name=&quot;id&quot; key=&quot;true&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot;&gt;
+        &lt;doc&gt;A person&#39;s unique ID.&lt;/doc&gt;
+      &lt;/member&gt;
+      &lt;member name=&quot;name&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;Name&quot; /&gt;
+      &lt;member name=&quot;birthDate&quot; type=&quot;int64&quot; /&gt;
+      &lt;member name=&quot;gender&quot; type=&quot;string&quot; /&gt;
+      &lt;member name=&quot;mother&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; /&gt;
+      &lt;member name=&quot;father&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; /&gt;
+      &lt;member name=&quot;spouse&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; /&gt;
+      &lt;member name=&quot;home&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; /&gt;
+      &lt;member name=&quot;ownedHouses&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; sequenceMaxLength=&quot;-1&quot; /&gt;
+    &lt;/struct&gt;
+  &lt;/module&gt;
+&lt;/types&gt;</pre>
+</div></div><h4 id="PeopleInformation-HouseQDM">House QDM</h4><p>Below is the QDM for a house:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>housing.xml</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;"> &lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;types xmlns=&quot;http://www.qeo.org/formal/2013/Qeo_Data_Model&quot; version=&quot;0.1&quot;&gt;
+  &lt;include file=&quot;qeo_types.xml&quot;/&gt;
+  &lt;module name=&quot;org::qeo::sample::housing&quot;&gt;
+    &lt;struct name=&quot;Address&quot;&gt;
+      &lt;member name=&quot;street&quot; type=&quot;string&quot; /&gt;
+      &lt;member name=&quot;city&quot; type=&quot;string&quot; /&gt;
+      &lt;member name=&quot;zipcode&quot; type=&quot;string&quot; /&gt;
+      &lt;member name=&quot;state&quot; type=&quot;string&quot; /&gt;
+      &lt;member name=&quot;country&quot; type=&quot;string&quot; /&gt;
+    &lt;/struct&gt;
+    &lt;struct behavior=&quot;state&quot; name=&quot;House&quot;&gt;
+      &lt;member name=&quot;id&quot; key=&quot;true&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot;&gt;
+        &lt;doc&gt;A house&#39;s unique ID.&lt;/doc&gt;
+      &lt;/member&gt;
+      &lt;member name=&quot;address&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;Address&quot; /&gt;
+      &lt;member name=&quot;owners&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; sequenceMaxLength=&quot;-1&quot; /&gt;
+    &lt;/struct&gt;
+  &lt;/module&gt;
+&lt;/types&gt;
+
+</pre>
+</div></div><h4 id="PeopleInformation-DefiningAuxiliaryStructsandUsingtheminMemberDeclarations">Defining Auxiliary Structs and Using them in Member Declarations</h4><h5 id="PeopleInformation-INTHEPEOPLEDATAMODEL">IN THE PEOPLE DATA MODEL</h5><p>The <em>people</em> data model shows how we can define and use a struct (without behaviour) as a member in another struct. In it, there are two <span style="font-size: 10.0pt;line-height: 13.0pt;">structs:</span></p><ul><li><strong>Person:</strong> the major struct</li><li><strong>Name:</strong> a supporting struct, which is used as a member in Person.</li></ul><p>This is shown in the diagram below:</p><p><img class="confluence-embedded-image" width="300" src="attachments/21676175/21958622.jpg" data-image-src="attachments/21676175/21958622.jpg"></p><h5 id="PeopleInformation-STEP1:DEFINETHESTRUCT">STEP 1: DEFINE THE STRUCT</h5><p><span style="color: rgb(0,0,255);"> </span> First, we define the <em>Name</em> struct:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">    &lt;struct name=&quot;Name&quot;&gt;
+      &lt;member name=&quot;first&quot; type=&quot;string&quot; /&gt;
+      &lt;member name=&quot;middle&quot; type=&quot;string&quot; sequenceMaxLength=&quot;-1&quot; /&gt;
+      &lt;member name=&quot;last&quot; type=&quot;string&quot; /&gt;
+    &lt;/struct&gt;</pre>
+</div></div><h5 id="PeopleInformation-STEP2:USEITASMEMBER">STEP 2: USE IT AS MEMBER</h5><p>Then we use it as a member type for the <em>Person</em> struct:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;member name=&quot;name&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;Name&quot; /&gt;</pre>
+</div></div>    <div class="aui-message warning shadowed information-macro">
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>&quot;middle&quot; is a sequence. There can be any number of middle names. We use the <em>sequenceMaxLength</em> attribute to indicate this. Since Qeo only supports unlimited sequences at this point, we define the value of this attribute as -1. other values are not allowed (for now).</p>
+                    </div>
+    </div>
+<h5 id="PeopleInformation-INTHEHOUSEDATAMODEL">IN THE HOUSE DATA MODEL</h5><p><span style="color: rgb(0,0,0);">Similarly</span><span style="color: rgb(0,0,0);"> to the case described above, the <em>House</em> struct uses the <em>Address</em> struct as a member type. This struct is defined as follows:</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;struct name=&quot;Address&quot;&gt;
+&lt;member name=&quot;street&quot; type=&quot;string&quot; /&gt;
+&lt;member name=&quot;city&quot; type=&quot;string&quot; /&gt;
+&lt;member name=&quot;zipcode&quot; type=&quot;string&quot; /&gt;
+&lt;member name=&quot;state&quot; type=&quot;string&quot; /&gt;
+&lt;member name=&quot;country&quot; type=&quot;string&quot; /&gt;
+&lt;/struct&gt;</pre>
+</div></div><p><span style="color: rgb(0,0,0);">The House struct then uses this struct as a member:</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;member name=&quot;address&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;Address&quot; /&gt;</pre>
+</div></div><h4 id="PeopleInformation-DefiningKeyMembers">Defining Key Members</h4><p>We need to be able to clearly identify instances of a data type. We therefore use one of its members as a key member. An instance can be clearly defined by the value of its key member. Only main structs require a key. Auxiliary members used as member types do not require a key. In order to declare a member as key, we provide it with the <em>key=&quot;true&quot;</em> attribute. In the house and person QDMs, id is a key member:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;member name=&quot;id&quot; key=&quot;true&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot;&gt;</pre>
+</div></div>    <div class="aui-message warning shadowed information-macro">
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>It is good practice to use UUID as type for identifying members.</p>
+                    </div>
+    </div>
+<h4 id="PeopleInformation-ReferencingStructsasMembers">Referencing Structs as Members</h4><p>Consider our example. In the <em>Person</em> struct,<em> mother, father, </em>and <em>spouse </em>are members of the <em>people</em> type, and ownedHouses is of the <em>housing</em> type. These members do not contain the actual data type instances, but rather contain a reference to them. In order to make this work, we need to:</p><ol><li>Make sure that the <em>type of the referencing member</em> and the <em>type of the key member </em><em>to which we are referencing</em> are the same.<span style="font-size: 10.0pt;line-height: 13.0pt;"><br /> </span></li><li><span style="font-size: 10.0pt;line-height: 13.0pt;">Include the data model that defines the data type </span><em>to</em><span style="font-size: 10.0pt;line-height: 13.0pt;"> which we are referencing in the data type we are referencing </span><em style="font-size: 10.0pt;line-height: 13.0pt;">from</em><span style="font-size: 10.0pt;line-height: 13.0pt;">.</span></li></ol><h5 id="PeopleInformation-STEP1:DEFINETHEREFERENCINGMEMBER">STEP 1: DEFINE THE REFERENCING MEMBER</h5><p><span style="color: rgb(0,0,255);"> </span>In the example, we followed the practice of using UUID as id member type of the <em>Person</em> and <em>House </em>struct<em>.</em></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">  &lt;member name=&quot;id&quot; key=&quot;true&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot;&gt;</pre>
+</div></div><p>All referencing members are therefore declared as UUID type as well:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;...&gt;
+&lt;member name=&quot;mother&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; /&gt;
+&lt;member name=&quot;father&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; /&gt;
+&lt;member name=&quot;spouse&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; /&gt;
+&lt;member name=&quot;home&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; /&gt;
+&lt;member name=&quot;ownedHouses&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; sequenceMaxLength=&quot;-1&quot; /&gt;
+&lt;...&gt;
+&lt;member name=&quot;owners&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::UUID&quot; sequenceMaxLength=&quot;-1&quot; /&gt;
+&lt;...&gt;</pre>
+</div></div><p><span style="color: rgb(0,0,255);"><br /></span></p>    <div class="aui-message warning shadowed information-macro">
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p><span style="color: rgb(0,0,0);"> <em>ownedHouses</em> and <em>owners</em> are sequences. A house can have multiple owners and and a person can have multiple houses.  However, only one house is marked as &quot;home&quot;.</span></p>
+                    </div>
+    </div>
+<h5 id="PeopleInformation-STEP2:INCLUDETHEREFERENCEDMODEL">STEP 2: INCLUDE THE REFERENCED MODEL</h5><p><span style="font-size: 10.0pt;line-height: 13.0pt;">To include the referenced data models, we use the </span><em style="font-size: 10.0pt;line-height: 13.0pt;">include</em><span style="font-size: 10.0pt;line-height: 13.0pt;"> statement:</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;...&gt;
+&lt;include file=&quot;housing.xml&quot; /&gt;
+&lt;...&gt;
+&lt;include file=&quot;people.xml&quot; /&gt;
+&lt;...&gt;</pre>
+</div></div><h5 id="PeopleInformation-EXAMPLE">EXAMPLE</h5><p><span>The diagram below shows an example of how several instances of the data types can be linked through referencing:</span></p><p><span><img class="confluence-embedded-image" src="attachments/21676175/21958621.jpg" data-image-src="attachments/21676175/21958621.jpg"></span></p><h4 id="PeopleInformation-UsingPredefinedDataModels">Using Predefined Data Models</h4><p>In the same way we can use predefined structs inside of other structs, we can use predefined, standard data models. This adds a degree of standardization to your Data Models. Even though such a library does not yet exist, it is the intention of the Qeo programme to provide it. </p><p>Both people and house use <em>UUID</em>,  a struct defined in the Qeo library, defined in the <em>qeo_types.xml</em> file. </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Snippet from Qeo.xml</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;struct name=&quot;UUID&quot;&gt;
+      &lt;doc&gt;The Qeo UUID type.&lt;/doc&gt;
+      &lt;member name=&quot;upper&quot; type=&quot;int64&quot; /&gt;
+      &lt;member name=&quot;lower&quot; type=&quot;int64&quot; /&gt;
+&lt;/struct&gt;</pre>
+</div></div><p><span style="font-size: 10.0pt;line-height: 13.0pt;">In order to incorporate this struct into our QDM, we use the </span><em style="font-size: 10.0pt;line-height: 13.0pt;">include</em><span style="font-size: 10.0pt;line-height: 13.0pt;"> statement:</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;include file=&quot;qeo_types.xml&quot;/&gt;</pre>
+</div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676175/21958621.jpg">referencing.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676175/21958622.jpg">Usingstructsasmembers.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

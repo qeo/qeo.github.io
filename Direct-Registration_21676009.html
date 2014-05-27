@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Direct Registration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Introduction-to-Qeo-Security_21676007.html">Introduction to Qeo Security</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Device-Registration_21676008.html">Device Registration</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Direct Registration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="DirectRegistration-DirectRegistrationwiththeEasyInstallFeature">Direct Registration with the Easy Install Feature</h2><h4 id="DirectRegistration-AbouttheEasyInstallFeature">About the Easy Install Feature</h4><p>The Easy Install feature allows qeo users to create a Qeo Realm and register to it without directly having to access the SMS. The name of the created Realm is QeoHome and the username is directly taken from the device. For example, in case of an Android device with a Google account on it, the username will be the name of the Google account (typically the GMail address).</p><h4 id="DirectRegistration-OpenIDAccount">OpenID Account</h4><p>In order to be able to use this procedure, you need to have an OpenID account. Typical OpenID providers are Google and Yahoo, but there are many others. </p><h4 id="DirectRegistration-Process">Process</h4><p>The process is as follows:</p><ol><li>The device user starts any Qeo application on a non-registered device.</li><li>On an android device, the system will check if the Qeo Service is installed. If not, the user is informed the Qeo Service is not found.</li><li>The system requests which Open ID provider is to be used.</li><li>The user selects an OpenID provider (e.g. Google, Yahoo).</li><li>Using the OpenID account, the system transparently creates a Realm called QeoHome and adds the user and the device to it. OTC exchange is done under the hood.</li></ol><p>Note that the user can add more users and devices to the QeoHome Realm.</p><p> </p><h2 id="DirectRegistration-AdvancedDirectRegistration(OTClogin)">Advanced Direct Registration (OTC login)</h2><h4 id="DirectRegistration-AuthenticationProcess">Authentication Process</h4><p>For ease of understanding, this process uses ‘device’ while this actually identifies the device and the user. Refer to <a href="Device-Registration_21676008.html#DeviceRegistration-Qeo_Identity">Qeo Identity</a> for more information.</p><p>Registration and authentication of a device in the Qeo Realm occurs in the following steps:</p><ol><li class="NumberedList1">The Realm Administrator creates an administrator account and realm on the Security Management Server. A realm ID is generated.</li><li class="NumberedList1">The Realm Administrator adds a user in the realm. A userID is generated.</li><li class="NumberedList1">The Realm Administrator adds a device to a user. A deviceID and OTC is generated, and the Server URL is shown. The administrator will pass the OTC and URL to the User.</li><li class="NumberedList1">When a User starts up the first Qeo application on his device, upon pressing the 'OTC login' action bar item, he is requested to enter the One Time Code and Server URL.</li><li class="NumberedList1">The device issues a certificate request (CSR) with the public key that is generated together with the private key via SCEP. </li><li class="NumberedList1">The device connects to the RA server using SCEP (Simple Certificate Enrollment Protocol) .</li><li class="NumberedList1">The device authenticates itself with the OTC and verifies if the RA server is genuine.  I.e. verifies if the RA certificate is signed by a trusted authority. </li><li class="NumberedList1">The device sends the CSR to the RA server for signing. </li><li class="NumberedList1">The RA verifies the CSR and uses the OTC to associate the CSR to the realm, user and new device.</li><li class="NumberedList1">The OTC is made invalid so it cannot be used to register a second device..</li><li class="NumberedList1">The &quot;adapted&quot; CSR is forwarded to the Certificate Authority (CA) for signing. </li><li class="NumberedList1">The chain of certificates (master CA cert, realm CA cert and user certificate) are sent back to the device. </li><li class="NumberedList1">The user's device is now ready to authenticate the other Qeo Realm identities and be authenticated by the other Qeo Realm identities. It can also authenticate with the SMS for policy file updates.</li></ol>    <div class="aui-message warning shadowed information-macro">
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>Steps 1, 2 and 3 are not always necessary. Realm, user and device may already exist.</p>
+                    </div>
+    </div>
+<h4 id="DirectRegistration-Diagram">Diagram</h4><p>Below is a diagram representing the process:</p><p><img class="confluence-embedded-image" src="attachments/21676009/21958411.png" data-image-src="attachments/21676009/21958411.png"></p><p> </p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676009/21958411.png">image2014-2-20 15:7:12.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676009/21958412.png">image2014-2-20 15:5:20.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

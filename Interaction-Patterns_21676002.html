@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Interaction Patterns</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-System-Description_21675993.html">Qeo System Description</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Exploring-Qeo-Concepts_21675997.html">Exploring Qeo Concepts</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Interaction Patterns
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 class="BlockLabel" id="InteractionPatterns-AboutthisSection">About this Section</h1>
+<h4 class="BlockLabel" id="InteractionPatterns-InthisSection">In this Section</h4>
+<p>State and Event Topics offer Publishers and Subscribers a way to provide and consume information. In this section, we discuss the high-level interaction patterns that can be constructed from these building blocks to enable meaningful interaction between different Qeo participants.</p>
+<h4 class="BlockLabel" id="InteractionPatterns-ActorsandRoles">Actors and Roles</h4>
+<p>There are two concepts that are required to describe the interaction:</p>
+<p class="BulletedList1"><strong>▪    </strong>A <em>Qeo Actor</em> is an individual process or application that participates in Qeo interactions. In a distributed application, one could consider it to be one of the components of the distributed application.</p>
+<p class="BulletedList1"><strong>▪    </strong>A <em>Role</em> is a well-defined set of responsibilities that can be taken up by an Actor in a distributed application. From the description of the Role, one can deduce the Topics the Actor should subscribe to or publish on. </p>
+    <div class="aui-message hint shadowed information-macro">
+                            <span class="aui-icon icon-hint">Icon</span>
+                <div class="message-content">
+                            
+<p><span>One Actor can play multiple roles simultaneously.</span></p>
+                    </div>
+    </div>
+
+<h4 id="InteractionPatterns-InteractionPatterns">Interaction Patterns</h4>
+<p>Currently, two main interaction patterns are defined: </p>
+<ul>
+<li class="BulletedList1"><em>Observer</em> Pattern, and the </li>
+<li class="BulletedList1"><em>Directed State</em> Pattern.</li></ul>
+<h1 id="InteractionPatterns-TheObserverPattern">The Observer Pattern</h1>
+<h4 class="BlockLabel" id="InteractionPatterns-Description">Description</h4>
+<p>This is the basic publish/subscribe interaction pattern.</p>
+<h4 class="BlockLabel" id="InteractionPatterns-Roles">Roles</h4>
+<p>The pattern defines two roles:</p>
+<ul>
+<li class="BulletedList1">The <em>Subject</em> is either a source of events or an owner of state. The Subject publishes events or state updates on a Qeo Topic.</li>
+<li class="BulletedList1">The <em>Observer</em> is interested in a certain type of events or a certain kind of state. It subscribes to a Qeo Topic.</li></ul>
+<p>There can be many Subjects and/or many Observers on the same Qeo Topic. Subjects are unaware of the Observers, and (barring explicit modelling in the published data type) Observers are unaware of specific Subjects.</p>
+<h4 class="BlockLabel" id="InteractionPatterns-FlowofInformation">Flow of Information</h4>
+<p>The flow of information in the pattern is <em>unidirectional</em>: if flows only from <em>Subject</em> to <em>Observer</em>.</p>
+<h4 class="BlockLabel" id="InteractionPatterns-ReactiveProgrammingversusPushStyleProgramming">Reactive Programming versus Push Style Programming</h4>
+<p>This pattern fits with the concept of reactive programming, where components do not push other components to perform a certain action, but rather observe their environment and react to changes in that environment. The former approach encourages close coupling of components (the push style requires the pushed component to be present or the system breaks down), whereas the latter approach is more loosely coupled, and hence more robust in a distributed environment.</p>
+<h1 id="InteractionPatterns-DirectedStatePattern">Directed State Pattern</h1>
+<h4 class="BlockLabel" id="InteractionPatterns-Description.1">Description</h4>
+<p>This is an interaction pattern that allows Actors to drive the global system state forward by expressing their wishes with respect to the state of some other Actor. The key insight of the Directed State Pattern is that one Actor's wishes with respect to the global state can be considered to be part of the Actor's own state. Hence, this &quot;desired state&quot; can be observed, and other Actors can use this information to drive their own state forward.</p>
+<h4 class="BlockLabel" id="InteractionPatterns-Roles.1">Roles</h4>
+<p>The pattern defines two roles:</p>
+<ul>
+<li class="BulletedList1">The <em>Effector</em> is an actor that &quot;owns&quot; the state of some physical or logical entities. It publishes this state on the Current State Topic.</li>
+<li class="BulletedList1">The <em>Requester </em>is an actor that wants to influence the state owned by the Effector. It publishes its wishes with respect to the Effector's state on the Desired State Topic.</li></ul>
+<h4 class="BlockLabel" id="InteractionPatterns-Principle">Principle</h4>
+<p>In essence, the Directed State pattern is the combination of two unidirectional Observer patterns:</p>
+<ul>
+<li class="BulletedList1">The <em>Effector</em> is the Subject for the Current State, but acts as Observer for the Desired State</li>
+<li class="BulletedList1">The <em>Requester </em>is the Observer of Current State, but the Subject of Desired State</li></ul>
+<p>The Effector will observe the Requester's desires, and based on these desires it will decide how to evolve the entities it &quot;owns&quot;. This evolution is then reflected in the Current State, which (ideally) evolves towards the Desired State.</p>
+<h4 class="Figure" id="InteractionPatterns-AdvantagesovertheTypicalRPCPattern">Advantages over the Typical RPC Pattern</h4>
+<p>On the surface, the Directed State Pattern is just a roundabout way for doing an RPC, but there are definitely differences between the two approaches:</p>
+<ul>
+<li class="BulletedList1">Instead of one bidirectional exchange, there are two unidirectional communications in this pattern. This means that it is less easy to propagate an error code back when a requested change is not possible. Rather, the Requester must observe the Effector, and conclude that the Current State does not evolve according to its wishes. </li>
+<li class="BulletedList1">There is no hard coupling between the Requester and the Effector: it is quite possible to formulate Desired State in such a way that it is not directed towards any specific Actor, and as such it may be possible that some other Actor A, which can also observe the Desired State, decides to drive its own state forward as a result of the publication done by the Requester. In this way, fault tolerance can be built into the system (other components pick up the work if a given Effector is non-responsive), or new behaviours may be added to the system without breaking old components (A is developed later than our Effector and Requester and implements an additional behaviour the other two don't know about).</li>
+<li class="BulletedList1">Because the Requester's wishes are expressed in a data-oriented way (essentially, the Requester is saying &quot;I would like your state to evolve towards this end goal&quot;), the purpose-specific messages of the RPC pattern are avoided. There is one generic way to express any action the Requester wishes the Effector to undertake.</li></ul>
+<p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

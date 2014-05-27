@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : UUID</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Developer-Guide_21676089.html">Qeo Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Miscellaneous-Topics_21676110.html">Miscellaneous Topics</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Non-Basic-Types-in-the-Qeo-Library_21676111.html">Non-Basic Types in the Qeo Library</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : UUID
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created and last modified by <span class='author'> lissensj</span> on May 26, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="UUID-Use">Use</h4><p>The UUID data type is used to model any kind of Identification number (ID). IDs are often key members in a struct.</p><h4 id="UUID-Description">Description</h4><p>UUID consists of two 64 bit integers called &quot;upper&quot; and &quot;lower&quot;.</p><h4 id="UUID-QDM">QDM</h4><p>The QDM description of UUID is shown in the QDM snippet below:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">(...)
+    &lt;struct name=&quot;UUID&quot;&gt;       
+       &lt;doc&gt;A generic 128-bit UUID.&lt;/doc&gt;
+       &lt;member name=&quot;upper&quot; type=&quot;int64&quot;&gt;
+           &lt;doc&gt;Upper 64-bit of identifier.&lt;/doc&gt;
+       &lt;/member&gt;
+       &lt;member name=&quot;lower&quot; type=&quot;int64&quot;&gt;
+           &lt;doc&gt;Lower 64-bit of identifier.&lt;/doc&gt;
+       &lt;/member&gt;
+    &lt;/struct&gt;
+(...)</pre>
+</div></div><h4 id="UUID-ExampleofUse:GeneratingaUUIDonAndroid">Example of Use: Generating a UUID on Android</h4><p>The code snippet below shows how to generate a random UUID for Qeo:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">java.util.UUID jid = java.util.UUID.randomUUID();
+org.qeo.UUID qid = new org.qeo.UUID();
+qid.upper = jid.getMostSignificantBits();
+qid.lower = jid.getLeastSignificantBits();</pre>
+</div></div><h4 id="UUID-ExampleofUse:GeneratingaUUIDonUnix/LinuxinC">Example of Use: Generating a UUID  on Unix/Linux in C</h4><p>The code snippet below shows how to generate a random UUID for Qeo:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">/*
+* To get random character value of UUID string from Unix/Linux OS 
+* - input: UUID generator path e.g. /proc/sys/kernel/random/uuid
+* - output: a pointer to allocated memory with the UUID string, 
+* an empty string if method is failed
+* NOTE: memory has to be released later on
+*/
+char* get_uuid_string_from_sys(const char* path)
+* get_uuid_string_from_sys(const char* path){
+FILE* file = NULL;
+char temp[128]; /* e9cabebc-923b-4932-a534-9578a6904bf8 */
+char* result = NULL;
+if (path == NULL){
+/* error – invalid input argument */
+return strdup(&quot;&quot;);
+}
+file = fopen(path, &quot;rb&quot;);
+if (file == NULL ) {
+/* error – file is not opened */
+return strdup(&quot;&quot;);
+}
+if (fgets(temp, sizeof(temp), file) == NULL){
+fclose(file);
+/* error - Could not get UUID */
+return strdup(&quot;&quot;);
+}
+fclose(file);
+result = strdup(temp);
+if (result == NULL ) {
+/* error - memory allocation call is failed */;
+return strdup(&quot;&quot;);
+}
+return result;
+}
+/*
+* To get qeo UUID structure from Unix/Linux OS based UUID string
+* - input: UUID string, format is &quot;e9cabebc-923b-4932-a534-9578a6904bf8&quot;
+* - output: qeo UUID structure 
+*/
+org_qeo_UUID_t uuid_from_str(char* string)
+{
+char uuid_parsed[34];
+char upperId[17];
+char lowerId[17];
+uint64_t upper = 0;
+uint64_t lower = 0;
+org_qeo_UUID_t qeoUUID;
+if (string == NULL ) {
+/* error - Invalid input argument */
+qeoUUID.upper = upper;
+qeoUUID.lower = lower;
+return qeoUUID;
+}
+/* Remove all &#39;-&#39; characters */
+char *src = string;
+char *dst = uuid_parsed;
+while ((*dst++ = *src++)) {
+if (*src == &#39;-&#39;) {
+src++;
+}
+}
+/* Split in 2 and convert from HEX to uint64_t */
+snprintf(upperId, sizeof(upperId), &quot;%s&quot;, uuid_parsed);
+snprintf(lowerId, sizeof(lowerId), &quot;%s&quot;, uuid_parsed + 16);
+upper = strtoull(upperId, NULL, 16);
+lower = strtoull(lowerId, NULL, 16);
+qeoUUID.upper = upper;
+qeoUUID.lower = lower;
+return qeoUUID;
+}
+/*
+* To get a random UUID qeo structure from Unix/Linux based system
+* - input: a pointer to qeo structure to be filled in
+* - output: 0 a qeo UUID
+* -1 function is failed 
+*/
+int get_uuid_from_sys(org_qeo_UUID_t * pUUID)
+{
+char* result_uuid = NULL;
+if(!pUUID){
+/* error - Invalid input argument ! */
+return -1;
+}
+result_uuid = get_uuid_string_from_sys(&quot;/proc/sys/kernel/random/uuid&quot;);
+if (!result_uuid) {
+/* error - uuid_string_from_sys call is failed ! */
+return -1;
+} else if (strcmp(result_uuid,&quot;&quot;) == 0){
+free(result_uuid);
+/* error - get_uuid_string_from_sys is failed ! */
+return -1;
+}
+*pUUID = uuid_from_str(result_uuid);
+free(result_uuid);
+return 0; 
+}
+
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

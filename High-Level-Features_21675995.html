@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : High-Level Features</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-System-Description_21675993.html">Qeo System Description</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : High-Level Features
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p class="BlockLabel">Based on Qeo's main goal, we have derived a set of high-level features. These can be captured in a single mission statement:</p><h4 class="BlockLabel" id="High-LevelFeatures-QeoMissionStatement">Qeo Mission Statement</h4><p>Qeo is an open standard that enables IP-connected devices and services to easily exchange information in a secure and private fashion. </p><p>The current release of Qeo already accomplishes a large part of this, but some aspects are still under development:</p><ul><li class="BulletedList1">Features that are not yet present in this release are marked below as <span style="color: rgb(255,0,0);"><strong>[under development]</strong></span>.</li><li class="BulletedList1">Features that are present but not fully developed yet are marked <span style="color: rgb(255,0,0);"><strong>[partially present]</strong></span>.</li></ul><h4 class="BlockLabel" id="High-LevelFeatures-OpenStandard">Open Standard</h4><p>An <em>open standard</em> means that:</p><ul><li class="BulletedList1">A detailed specification document is available to everyone which allows people to write their own implementation of Qeo. <span style="color: rgb(255,0,0);"><strong>[under development]</strong></span></li><li class="BulletedList1">An open source implementation is available for reference purposes.</li></ul><h4 class="BlockLabel" id="High-LevelFeatures-IP-Connected">IP-Connected</h4><p><em>IP-connected</em> means that: </p><ul><li class="BulletedList1">Qeo devices and services are connected to an IP network</li><li class="BulletedList1">When two devices/services want to exchange data:<ul><li class="BulletedList2">One of them is able to reach the other one with a direct IP connection (TCP or UDP).</li><li class="BulletedList2">They are both able to reach each other via the public internet.</li></ul></li></ul><p>Devices that are not IP-connected can still exchange information over Qeo, provided another IP-connected device provides the functionality to bridge whatever non-IP communication mechanism exists towards Qeo.</p><h4 class="BlockLabel" id="High-LevelFeatures-ExchangingInformation">Exchanging Information</h4><p><em>Exchanging information</em> means that:</p><ul><li class="BulletedList1">Devices and services are able to provide available information (captured through sensors, computed values, internal state...) to other devices and services.</li><li class="BulletedList1">Devices and services are able to express the type of information they are interested in. Thus, they will only read and use the information they need or are interested in.</li></ul><p>The type and format of the information that Qeo devices and services can exchange is not strictly regulated by Qeo. This means that Qeo integrators and Qeo service developers are able to define new types of information to exchange, and have the freedom to decide how this information should be represented. </p><h4 class="BlockLabel" id="High-LevelFeatures-Secure">Secure</h4><p><em>Secure</em> means that unauthorized devices and services:</p><ul><li class="BulletedList1">Are not able to request information from authorized Qeo devices and services.</li><li class="BulletedList1">Are not able to provide information to authorized Qeo devices and services.</li><li class="BulletedList1">Are not able to snoop for information that is being exchanged between authorized Qeo devices and services<span style="color: rgb(255,0,0);">.</span></li></ul><h4 class="BlockLabel" id="High-LevelFeatures-Private">Private</h4><p><em>Private</em> means:</p><ul><li class="BulletedList1">That information exchanged between authorized Qeo devices and services remains on devices under control of the Qeo end users.</li><li class="BulletedList1">When information needs to be passed to/through an information processor (i.e. Qeo subsystems assisting in the storage or transmission of data), the data is encrypted and, as such, unusable for that information processor.   </li></ul><h4 class="BlockLabel" id="High-LevelFeatures-Easy">Easy</h4><p>Here, <em>easy</em> has multiple meanings: </p><ul><li class="BulletedList1">Qeo is easy to use from the perspective of a Qeo end user. It requires very little setup.</li><li class="BulletedList1">Qeo is easy to integrate in a broad range of existing CE products. Qeo runs on Android phones and tablets. It will also work on Linux based gateways, Linux and Android-based set-top boxes and iPhones/iPads as well as in an HTML5 JS environment.</li><li class="BulletedList1"><span style="color: rgb(0,51,102);">Qeo is easy to use from the perspective of a developer. Developers get an API that is familiar and specific to the environment they are working in.</span></li></ul><h4 class="BulletedList1" id="High-LevelFeatures-Implementation">Implementation</h4><p class="BulletedList1"><span style="color: rgb(0,51,102);">While the details of the implementation of Qeo are transparent to the user, it is important to know that it uses multicast to publish and subscribe to Topics. Therefore, a potentially Qeo-enabled device needs to support multicasting.</span></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

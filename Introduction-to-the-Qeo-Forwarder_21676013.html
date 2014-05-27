@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Introduction to the Qeo Forwarder</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Introduction to the Qeo Forwarder
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created and last modified by <span class='author'> lissensj</span> on May 26, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="IntroductiontotheQeoForwarder-QeoinaLANEnvironmentvsaWANEnvironment">Qeo in a LAN Environment vs a WAN Environment</h4><p>Qeo-enabled devices in a LAN can discover each other through Qeo's multicasting mechanism. Talking Qeo within a Realm is therefore quite straightforward as long as all these devices are located within the same LAN. Since many devices are mobile devices, they will often move out of the range of that LAN. Without additional provisions, that device will no longer be able to talk to the other devices in the Realm.</p><p><img class="confluence-embedded-image" width="500" src="attachments/21676013/21958418.jpg" data-image-src="attachments/21676013/21958418.jpg"></p><p>In order for Qeo to work outside a home LAN, the device outside the LAN needs to know where and how to talk to the other devices inside the home LAN. This is what the Qeo Forwarder is for. </p><p>However, there is no need for a forwarder as long as there are only apps in your LAN.</p><h4 id="IntroductiontotheQeoForwarder-WhatistheQeoForwarder?">What is the Qeo Forwarder?</h4><p>The Qeo Forwarder is basically a domain extender. It is an entity, located in the LAN that:</p><ul><li>Passes Qeo communication from devices on the LAN to devices on the WAN</li><li>Passes Qeo communication from devices on the WAN to devices on the LAN</li></ul><p>In order to be able to communicate, all devices on LAN and WAN naturally need to be part of the same Qeo Realm. When a Qeo-enabled WAN device needs to communicate with Qeo-enabled LAN devices over Qeo, it must use the Forwarder. All Qeo interactions occur as if the device was physically present inside the LAN. The Realm is extended over the boundaries of the LAN.</p><p><img class="confluence-embedded-image" width="500" src="attachments/21676013/21958417.jpg" data-image-src="attachments/21676013/21958417.jpg"></p><h4 id="IntroductiontotheQeoForwarder-LocationService">Location Service</h4><p>A device on the WAN needs to know where and how to contact the Qeo Forwarder. In order to get this information, it contacts the Location Service.</p><p><img class="confluence-embedded-image" width="500" src="attachments/21676013/21958416.jpg" data-image-src="attachments/21676013/21958416.jpg"></p><p>On the highest level, the process is as follows:</p><ol><li><p>When a Qeo Forwarder goes online, it finds out its coordinates (public IP address and port) at which it is available. Alternatively it can use preconfigured coordinates. The Qeo application performs its expected operations independently of whether is has found a Qeo Forwarder or not. If no Forwarder can be found (e.g. no Forwarder configured and the Location Service is unavailable), operation remains confined to LAN borders. If the Qeo Forwarder is found, WAN operation becomes possible. </p></li><li>The Qeo Forwarder contacts and registers to the Location Service, providing its &quot;coordinates&quot;. It also sends out this info to other devices in the Realm.</li></ol><h4 id="IntroductiontotheQeoForwarder-Qeoapplogic">Qeo app logic</h4><p>The process is as follows:</p><p><img class="confluence-embedded-image" width="500" src="attachments/21676013/21958415.jpg" data-image-src="attachments/21676013/21958415.jpg"></p><ol><li>When a Qeo application is started on a device, it will try to setup a connection with the Forwarder in the home LAN (provided there is a forwarder of course). Note that without a forwarder you still have Qeo communication within your LAN.</li><li>A Qeo app has a proven connection with a forwarder when it received a Forwarder topic containing the &quot;coordinates&quot; of the forwarder.</li><li>As long as there is no proven connection with a forwarder, the Qeo app will periodically poll the Location service to get the &quot;coordinates&quot; of the forwarder.</li><li>Based on the obtained &quot;coordinates&quot; of the forwarder, a connection is being set up between the Qeo app and the Forwarder.</li></ol><p> </p>    <div class="aui-message hint shadowed information-macro">
+                            <span class="aui-icon icon-hint">Icon</span>
+                <div class="message-content">
+                            <p>Note the forwarder is only needed for passing the LAN/WAN boundary.</p>
+                    </div>
+    </div>
+<h4 id="IntroductiontotheQeoForwarder-3GScenario">3G Scenario</h4><p>Below is a typical scenario for involving 3G devices and the Qeo Forwarder: In this scenario, we make maximum use of 3G connections. Evidently, this is not the only way to set up your Realm and authenticate your devices. For this scenario, we are using Android devices and QSimpleChat as Qeo Application. </p><ol><li>Create a Realm using a browser on a 3G device.</li><li>Create one or more users in your Realm. </li><li>Authenticate a number of devices using 3G by adding them to a user.</li><li>At this point, your devices are <em>not yet able to chat</em> since they have no Qeo Forwarder information and are not connected to any Realm. Even if you run QSimpleChat,  the devices you added will not see each other. In order to have them communicate, connect all of them to the same LAN. It may take a few moments for the Qeo connection to synchronize. If you feel the process is taking too long, you can speed it up by restarting QSimpleChat.</li><li>If you want to have these devices communicate over Qeo outside this LAN, make sure you have a Qeo Forwarder running on the LAN and that it is started. Make sure the device running the Qeo Forwarder has a connection to the Internet so it can register to the Location Service.</li><li>While the devices are connected to the LAN, run QSimpleChat on on all devices. </li><li>All connections and Qeo Forwarder information is now set up. If you move any of the devices outside the boundaries of the LAN, the device will use 3G to contact the Location Service to get the Qeo Forwarder information. It may take a few moments for the Qeo connection to synchronize. If you feel the process is taking too long, you can speed it up by restarting QSimpleChat. You are now able to chat using 3G. </li><li>If your device moves in range of the LAN again, it will switch back to Qeo communication over the LAN and you will chat over a LAN connection.</li></ol><p> </p><p> </p><p> </p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676013/21958415.jpg">how-fw-works.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676013/21958416.jpg">Location-service.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676013/21958417.jpg">Qeo-On-WAN-w-forwarder.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676013/21958418.jpg">Qeo-On-WAN.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

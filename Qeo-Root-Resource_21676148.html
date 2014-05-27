@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Qeo Root Resource</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API_21676144.html">REST API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Qeo Root Resource
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="QeoRootResource-AbouttheQeoRootResource">About the Qeo Root Resource</h4><p>The Qeo Root Resource provides a list of all services provided by the Qeo Security Management Server. For each service, it lists the corresponding entry point URL(s).</p><p>Currently it lists the following services:</p><ul><li><strong>PKI</strong>: to issue certificates based on SCEP.</li><li><strong>Location:</strong> to register a forwarder and retrieve a list of forwarders.</li><li><strong>Policy</strong><strong>:</strong> to retrieve a policy file and to check whether the policy file of a device is still up to date</li><li><strong>Management:</strong><span> a REST API to manage realms, users and devices<br /></span></li><li><strong><span>OAuth: </span></strong><span>the Qeo OAuth server to provide access to the Rest API<br /></span><ul><li><span>Authorization endpoint: used by client to retrieve OpenID selection screen</span></li><li><span>Token endpoint: used by the client to exchange an authorization grant for an access token</span></li></ul></li><li><span><strong>UI</strong>: the Web UI on top of the REST API<br /></span></li></ul><p>Each service can have a self link (representing the service resource itself, that might return a list of entry points) and can have a list of entry points. The entry points are URLs that can be used to consume resources provided by that service. By following the link provided by the entry points, a client should be able to access to all resources provided by the service.</p>    <div class="aui-message hint shadowed information-macro">
+                            <span class="aui-icon icon-hint">Icon</span>
+                <div class="message-content">
+                            <p>From release 0.20.0 onwards, the root resource is fetched over HTTPS instead of HTTP. Clients using an older version cannot fetch it over HTTPS. Therefore, using the HTTPS links in any of the procedures in this documentation (cfr <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=Management+Procedures&amp;linkCreation=true&amp;fromPageId=21676148">Management Procedures</a>) will not work. Either manually adapt the URLs to HTTP or upgrade to 0.20.0. We recommend the latter option.</p>
+                    </div>
+    </div>
+<h4 id="QeoRootResource-API">API</h4><div class="table-wrap"><table class="confluenceTable"><tbody><tr><td style="text-align: right;" class="confluenceTd"><strong>Description:</strong></td><td class="confluenceTd">Retrieve the Qeo Root Resource.</td></tr><tr><td style="text-align: right;" class="confluenceTd"><strong>URL:</strong></td><td class="highlight-grey confluenceTd" data-highlight-colour="grey"><span>/</span></td></tr><tr><td style="text-align: right;" class="confluenceTd"><strong>HTTP Method:</strong></td><td class="confluenceTd">GET</td></tr><tr><td style="text-align: right;" class="confluenceTd"><strong>Request:</strong></td><td class="confluenceTd"><p><em>HTTP Header</em></p><ul><li style="list-style-type: none;background-image: none;"><ul><li><span>Accept: application/json</span><span> </span></li><li><span>If-None-Match: hash of cached resource (optional)</span></li></ul></li></ul></td></tr><tr><td style="text-align: right;" class="confluenceTd"><strong>Response:</strong></td><td class="confluenceTd"><p><strong>HTTP 200 Success </strong></p><p><em>HTTP Header</em></p><ul><li style="list-style-type: none;background-image: none;"><ul><li>Content-Type: application/<span>application+json</span></li><li>ETag: hash of resource (optional)</li><li>Cache directive: the time is second the result should be cached (optional)</li></ul></li></ul><p><em>Body</em></p><p>The list of Qeo services with corresponding entry point URL:</p><div><div class="syntaxhighlighter nogutter  javascript"><p> </p><div class="table-wrap"><table class="confluenceTable"><tbody><tr><td class="confluenceTd"><div class="container" title="Hint: double-click to select code"><pre>{
+  &quot;href&quot; : &quot;http://join.qeo.org/&quot;,
+  &quot;PKI&quot; : {
+    &quot;scep&quot; : {
+      &quot;href&quot; : &quot;https://join.qeo.org:8442/ra/scep/pkiclient.exe&quot;
+    }
+  },
+  &quot;location&quot; : {
+    &quot;forwarders&quot; : {
+      &quot;href&quot; : &quot;https://join.qeo.org:8443/pull/forwarders&quot;
+    }
+  },
+  &quot;policy&quot; : {
+    &quot;check&quot; : {
+      &quot;href&quot; : &quot;http://join.qeo.org/pull/checkpolicy&quot;
+    },
+    &quot;pull&quot; : {
+      &quot;href&quot; : &quot;https://join.qeo.org:8443/pull/policy&quot;
+    }
+  },
+  &quot;oauth&quot; : {
+    &quot;token&quot; : {
+      &quot;href&quot; : &quot;https://oauth.qeo.org/v1/token&quot;
+    },
+    &quot;authorization&quot; : {
+      &quot;href&quot; : &quot;https://oauth.qeo.org/oauth2/authorize&quot;
+    }
+  },
+  &quot;management&quot; : {
+    &quot;href&quot; : &quot;https://join.qeo.org:8442/qeo-rest-service&quot;
+  },
+  &quot;ui&quot; : {
+    &quot;href&quot; : &quot;https://my.qeo.org/&quot;
+  }
+}</pre></div></td></tr></tbody></table></div><p> </p></div></div><p><strong>HTTP 304 Not Modified</strong></p><p>If the resource match the If-None-Match header.</p></td></tr></tbody></table></div><h4 id="QeoRootResource-RootResourceFormat">Root Resource Format</h4><h5 id="QeoRootResource-Qeo">Qeo</h5><p>The Qeo Root Resource represent all the service provided by Qeo cloud to Qeo devices and users. The Qeo Root Resource has a self reference (href property) and contains one property per service. The property name corresponds to the name of the service.</p><h5 id="QeoRootResource-Service">Service</h5><p>Each service can be either a link to the resource representing the service or be the embedded resource representing the service. A service resource can have a self reference (not mandatory) and have a list of entry points (generally the first resources you need to access when consuming a service). These entry points are links. A service can have a <strong style="font-size: 14.0px;line-height: 1.4285715;"><strong>deprecation</strong> </strong>marking that the service is deprecated. Extra information, specific to the service can be present.</p><h5 id="QeoRootResource-Link"><strong>Link</strong></h5><p>A link will be an object that contains at minimum an <strong>href</strong> property with the URL of the link. The relation of the link is the name of the link object.</p><h5 id="QeoRootResource-Forwardcompatibility">Forward compatibility</h5><p>Clients consuming the Qeo Root Resource should be able to handle new properties, services and end points. If it encounters a service or an end point it doesn't know about, it should not take it into account. This way new services can be added without the need for each client to be updated. Clients will still need to be updated client to consume the new services.</p><h5 id="QeoRootResource-Deprecationandremoval">Deprecation and removal</h5><p>Client should be aware to the fact that a service or an end point can be marked as deprecated and removed. Clients should gracefully degrade its behaviour and inform the user. When a service or a link is marked as deprecated, the client should try to use another service/end point to perform the same operation. If the deprecated service or end point is used, the user should be warn is some way as the operation is not done in the most efficient way and it may not be possible to perform the operation in the future without client upgrade.</p><p>When a service or end point aren't present any more, the client should give an error to the user in a grace full way without impacting the other functionality. In a GUI, the application should first check if the operation is still possible (via known link) before displaying the GUI element triggering the operation.</p><p> </p><p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Introduction to Qeo Security</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Introduction to Qeo Security
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="IntroductiontoQeoSecurity-Introduction">Introduction</h4><p>The main goal of the Qeo security framework is to configure the boundaries of Qeo interactions between users, their devices and their applications.</p><p>The security framework is organized around the following hierarchy of entities :</p><ul><li><strong>Realm :</strong> a set of users, devices and applications that can exchange information via Qeo Topics. A Realm is assigned a Realm ID by the Security Management Server (see below). </li><li><p><strong>User :</strong> A User is an entity within a Qeo Realm that groups one or more Devices. A user is assigned a user id by the SMS.</p><p> </p></li><li><p><strong> Device:</strong> A Device is an entity that hosts or runs Applications. These Applications read or write to Qeo Topics. A device is assigned a device id by the SMS.</p><p> </p></li><li><strong>Application :</strong> An App or Application is an entity that either reads or writes to Qeo Topics. An application runs on a device.</li></ul><p>The diagram below shows this hierarchy:</p><p><img class="confluence-embedded-image" width="500" src="attachments/21676007/21958408.jpg" data-image-src="attachments/21676007/21958408.jpg"></p>    <div class="aui-message hint shadowed information-macro">
+                            <span class="aui-icon icon-hint">Icon</span>
+                <div class="message-content">
+                            <p>Qeo applications run on devices, assigned to a User. Currently, Qeo security is user-centric. Group your devices accordingly when using access control in Qeo. </p>
+                    </div>
+    </div>
+<h4 id="IntroductiontoQeoSecurity-SecurityMechanisms">Security Mechanisms</h4><p>Security is implemented by the following three mechanisms:</p><ul><li><strong>Registration and Authentication :</strong> create a Realm, define Users for this Realm and register Devices for these Users. At device registration time the Security Management Server (SMS) authenticates the device of a user by means of the One Time Code (OTC). There are two ways of registering a device: local and remote. Go <a href="Device-Registration_21676008.html">here</a> for more information.</li><li><strong>User-Level Access Control :</strong> defines which Users are allowed to access which data. This is defined by the Qeo security policy applicable within a realm.</li><li><strong>Application-Level Access Control :</strong> defines which Applications are allowed to access which data. This is defined by the Qeo manifest file accompanying the Qeo application.</li></ul><p>In order for two applications to successfully exchange data over Qeo, each of these security mechanisms needs to be configured correctly:</p><ul><li><em>The Realm Administrator</em> needs to allow the devices (on which the applications are running) to his Realm.</li><li><em>The Realm Administrator</em> needs to allow the User to access specific data topics by configuring the Qeo security policy accordingly.</li><li><em>The User</em> needs to allow the application to access specific data topics that are expressed in its application manifest file.</li></ul><p> </p><h4 id="IntroductiontoQeoSecurity-Architecture">Architecture</h4><p>Security is managed through a central server: the <em>Security Management Server</em>. This SMS can be used to create and configure a Realm and its corresponding Qeo security policy. Once the security policy is available to the different devices in the Realm, the devices can interact directly according this security policy without any further interaction with the Security Management Server. When the Qeo security policy gets updated (e.g. because a user is added or a user has been given different access rights to the Qeo topics) all devices in the realm need to apply this latest policy file to act in sync and according this latest Qeo security policy.</p><p><img class="confluence-embedded-image" src="attachments/21676007/21958409.jpg" data-image-src="attachments/21676007/21958409.jpg"></p><p>Users/Device/App combinations in Realm 1 are able to talk Qeo to each other, whereas they are unaware of anyone in other Realms and vice versa. Each Realm is separate from another.</p><h4 id="IntroductiontoQeoSecurity-LocationoftheSMS">Location of the SMS</h4><p>The SMS is located here:</p><p><a href="http://my.qeo.org/" class="external-link" rel="nofollow">http://my.qeo.org/</a></p><h4 id="IntroductiontoQeoSecurity-MoreInformation">More Information</h4><p>More information on the different security mechanisms can be found on:</p><p><ul class='childpages-macro'><li><a href="Device-Registration_21676008.html">Device Registration</a></li><li><a href="User-Level-Access-Control_21676011.html">User-Level Access Control</a></li><li><a href="Application-Level-Access-Control_21676012.html">Application-Level Access Control</a></li></ul></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676007/21958408.jpg">hierarchy.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676007/21958409.jpg">HighLevelDiagram.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

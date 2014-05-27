@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Basics of the Qeo Data Model (QDM)</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Basics of the Qeo Data Model (QDM)
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="BasicsoftheQeoDataModel(QDM)-AbouttheQDM">About the QDM</h4><p><span>The Qeo Data Model is an XML-based representation of a logical or physical entity used when talking Qeo. It presents a programming-language-independent way of representing a data structure. Using a Code Generator, this QDM can be translated into language-specific data descriptions. Currently, the SDK contains a translator for all currently supported development languages.</span></p><h4 id="BasicsoftheQeoDataModel(QDM)-BasicConcepts">Basic Concepts</h4><p>In order to understand the function, content and structure of a QDM, you need an understanding of Qeo concepts and principles. Before proceeding with this document, it is therefore necessary that you read the <a href="Qeo-System-Description_21675993.html">Qeo System Description</a> first. Below is a quick recap:</p><ul><li><p><strong>Topic:</strong> a piece of information that is exchanged over Qeo. A topic has an associated Data Type. In a topic, only objects of that type are published. A topic represents multiple instances of that Data Type.</p></li><li><p><strong>Reader:</strong> A Qeo entity that reads a topic. Readers typically subscribe to certain topics in which they are interested.</p></li><li><p><strong>Writer:</strong> A Qeo entity that writes information to a topic. The information is broadcast over Qeo. Any interested reader can subscribe to the topic.</p></li><li><p><strong>Properties: </strong>Topics have certain properties (comparable to parameters of an object). They are represented by fields in the Data Type.</p></li><li><p><strong>Behavior:</strong> Topics can also exhibit behavior. In Qeo, two different types of behavior exist:</p><ul><li><p><strong>State topic:</strong> represents a topic that holds certain values over a &quot;longer&quot; period of time. State topics use the value of key fields in order to distinguish the different instances of the topic.</p></li><li><p><strong>Event topic:</strong> represents a discrete, transitory event. The important factor in an event topic is its occurrence, not the values or fields associated with it. Event topics have no key fields.</p></li></ul></li></ul><h4 id="BasicsoftheQeoDataModel(QDM)-Versioning">Versioning</h4><p class="MsoNormal">A QDM has a version such it can be identified unambiguously.<span> The version is mentioned in the version attribute of the types XML element. As long as your data model updates are compatible, you can keep on using the same QDM and update the version. Although the version is a string type, following guidelines apply to the “version” : </span></p><ul><li class="MsoListParagraph"><span>A draft version is indicated by an &quot;integer.integer&quot; format </span><ul><li class="MsoListParagraph"><span>Example : version = “0.1”, “0.2”, etc. These are drafts towards official version “1”</span></li></ul></li><li class="MsoListParagraph"><span> </span><span>An official version <span>is indicated by an integer format</span> </span><ul><li class="MsoListParagraph"><span> </span><span>Example : version = “1”</span></li></ul></li><li class="MsoListParagraph"><span> </span><span>A draft vendor extension <span>is indicated by an</span> &quot;integer.string.integer.integer&quot; format :<br /></span><ul><li class="MsoListParagraph"><span>Example : version = “1.samsung.0.1”, “1.samsung.0.2”, etc. This indicates a sideway QDM evolution from version “1” in the org.qeo namespace. These versions are drafts towards official version “1.samsung.1”</span></li></ul></li><li class="MsoListParagraph"><span> </span><span>A official vendor extension <span><span>is indicated by an</span></span> &quot;integer.string.integer&quot; format :<br /></span><ul><li class="MsoListParagraph"><span> </span><span>Example : version = “1.samsung.1”. This indicates an official version being a  sideway QDM evolution from version “1” in the org.qeo namespace.</span></li></ul></li></ul><p class="MsoNormal"><span>When a vendor comes up with his own QDM from scratch, not being a sideway evolution from a Qeo QDM, he needs to define the QDM in his specific namespace, e.g. “org::samsung” . </span></p><p class="MsoNormal"><span>If you make a data model update that is not compatible anymore with the last version, <span>you need to define a new QDM with a new module name.</span><br /></span></p><h4 id="BasicsoftheQeoDataModel(QDM)-SupportedDataTypesinQeo">Supported Data Types in Qeo</h4><p>Fields in a data type can be of different types. The following types are supported in Qeo:</p><p><strong>Basic Types:</strong></p><ul><li><p>&quot;string&quot;: string</p></li><li>&quot;boolean&quot;: boolean</li><li>&quot;byte&quot;: byte</li><li>&quot;int16&quot;: signed int (16 bit)</li><li>&quot;int32&quot;: signed int (32 bit)</li><li>&quot;int64&quot;: signed int (64 bit)</li><li>&quot;float32&quot;: float (32-bit)</li></ul><p><strong>Non-Basic Types:</strong></p><ul><li><p>struct (i.e., another data type)</p></li><li>enums (see below)</li></ul><p><strong>Sequence:</strong></p><ul><li><p>sequence (= variable-length array) of any other supported type (except for a sequence of sequences. This is not possible in the current release.)</p></li></ul>    <div class="aui-message warning shadowed information-macro">
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>Do not treat a byte as an integer quantity. Qeo leaves the signedness of the byte type unspecified, which means you can get unexpected results when byte values are promoted to larger integral types. You may get sign extension when you don't expect it, or no sign extension when you do expect it.</p>
+                    </div>
+    </div>
+<h4 id="BasicsoftheQeoDataModel(QDM)-UsingEnums">Using Enums</h4><p>Enums or enumeration types are supported from release 0.19.0 onwards. Below is an example of a QDM that includes an enumeration type, as used in the <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=QSimpleChat+Apps&amp;linkCreation=true&amp;fromPageId=21676180">QSimpleChat Apps</a>:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;types xmlns=&quot;http://www.qeo.org/formal/2013/Qeo_Data_Model&quot; version=&quot;0.1&quot;&gt;
+    &lt;module name=&quot;org::qeo::sample::simplechat&quot;&gt;
+        &lt;enum name=&quot;ChatState&quot;&gt;
+            &lt;doc&gt;Possible chat participant states.&lt;/doc&gt;
+            &lt;enumerator name=&quot;AVAILABLE&quot;&gt;
+                &lt;doc&gt;The user is available for chatting.&lt;/doc&gt;
+            &lt;/enumerator&gt;
+            &lt;enumerator name=&quot;IDLE&quot;&gt;
+                &lt;doc&gt;The user is idle.&lt;/doc&gt;
+            &lt;/enumerator&gt;
+            &lt;enumerator name=&quot;BUSY&quot;&gt;
+                &lt;doc&gt;The user is busy and will not respond to messages.&lt;/doc&gt;
+            &lt;/enumerator&gt;
+            &lt;enumerator name=&quot;AWAY&quot;&gt;
+                &lt;doc&gt;The user is unavailable.&lt;/doc&gt;    
+            &lt;/enumerator&gt;
+        &lt;/enum&gt;
+        &lt;struct name=&quot;ChatParticipant&quot; behavior=&quot;state&quot;&gt;
+            &lt;doc&gt;A participant in a chat session.&lt;/doc&gt;
+            &lt;member name=&quot;name&quot; type=&quot;string&quot; key=&quot;true&quot;&gt; 
+                &lt;doc&gt;The name of the participant.&lt;/doc&gt;
+            &lt;/member&gt;
+            &lt;member name=&quot;state&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;ChatState&quot;&gt;
+                &lt;doc&gt;The state of the participant.&lt;/doc&gt;
+            &lt;/member&gt;
+        &lt;/struct&gt;
+    &lt;/module&gt;
+&lt;/types&gt;</pre>
+</div></div><p>In this case, the enumerator is used to define the state of a party in a chat session.</p><h4 id="BasicsoftheQeoDataModel(QDM)-AQDM&#39;sPlaceintheDeveloper&#39;sWorld">A QDM's Place in the  Developer's  World</h4><p>No matter which development language or platform you are using, developing the right topics and data types is an important and time-consuming part of the development process. In order to increase development efficiency, we can</p><ul><li>Re-use data types we developed before.</li><li>Use standardized data types.</li><li>Re-use data types made available by other developers.</li></ul><p>However, representing Data Types in a language-specific or platform-specific form poses an impediment for developers using a different platform, or for the same developer when developing on multiple platforms. In order to overcome this impediment, Data Types can be presented in a language-independent and standardized form. This is essentially what a Qeo Data Model does. Code generators can automatically translate the QDM representation of the data type to a representation in the language you are using for your development. Currently, Java and C translation are supported. In later releases, other common development languages will be supported.</p><p>The diagram below shows the place of the QDM in the development process:</p><p><img class="confluence-embedded-image" src="attachments/21676180/21958626.jpg" data-image-src="attachments/21676180/21958626.jpg"></p><p>A developer designs a number of logical or physical entities as well as an application logic that defines the interaction between these entities. The entities are represented by Data Types which are represented as Qeo Data Models. He develops a program that implements the logic in a specific language and uses a Code Translator to turn the QDMs into Code objects. The program code and objects are compiled into an application.</p><h4 id="BasicsoftheQeoDataModel(QDM)-Example:TheMediaEndpoint">Example : The Media Endpoint</h4><p><span style="font-size: 1.2em;"> </span><span style="line-height: 13.0pt;font-size: 10.0pt;">Consider the following Topic: a so-called </span><strong style="line-height: 13.0pt;font-size: 10.0pt;">Media Endpoint</strong><span style="line-height: 13.0pt;font-size: 10.0pt;">, i.e. a producer or consumer of media files. </span><span style="line-height: 13.0pt;font-size: 10.0pt;">This Topic has the following properties:</span></p><div class="table-wrap"><table class="confluenceTable"><tbody><tr><th class="confluenceTh">Property</th><th class="confluenceTh">Description</th><th class="confluenceTh">Type</th></tr><tr><td class="confluenceTd"><strong>ID</strong></td><td class="confluenceTd">Unique ID of the media endpoint</td><td class="confluenceTd">String</td></tr><tr><td class="confluenceTd"><strong>type</strong></td><td class="confluenceTd">describes whether the endpoint is a producer or consumer of media</td><td class="confluenceTd">String equal to &quot;SOURCE&quot; or &quot;SINK&quot;</td></tr><tr><td class="confluenceTd"><strong>capabilities</strong></td><td class="confluenceTd">Describes the supported media types, codecs and transports</td><td class="confluenceTd">String (MIME)</td></tr><tr><td colspan="1" class="confluenceTd"><strong>deviceId</strong></td><td colspan="1" class="confluenceTd">Device identity representing the Qeo device</td><td colspan="1" class="confluenceTd">DeviceId (standard Qeo ID format)</td></tr></tbody></table></div><p><span style="font-size: 1.2em;"> </span><span style="line-height: 13.0pt;font-size: 10.0pt;">The diagram below shows the structure of this Topic:</span></p><p><img class="confluence-embedded-image" width="300" src="attachments/21676180/21958627.jpg" data-image-src="attachments/21676180/21958627.jpg"></p><h4 id="BasicsoftheQeoDataModel(QDM)-MediaEndpointQDM">Media Endpoint QDM</h4><p><span style="font-size: 1.2em;"> </span><span style="line-height: 13.0pt;font-size: 10.0pt;">Below is the QDM Description for this Topic:</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;types xmlns=&quot;http://www.qeo.org/formal/2013/Qeo_Data_Model&quot; version=&quot;0.1&quot;&gt;
+        &lt;include file=&quot;qeo_types.xml&quot;/&gt;
+        &lt;module name=&quot;org::qeo::media&quot;&gt;
+            &lt;struct name=&quot;Endpoint&quot; behavior=&quot;state&quot;&gt;
+                &lt;member name=&quot;id&quot; type=&quot;string&quot; key=&quot;true&quot;&gt;
+                &lt;/member&gt;
+                &lt;member name=&quot;type&quot; type=&quot;string&quot;&gt;
+                &lt;/member&gt;
+                &lt;member name=&quot;capabilities&quot; type=&quot;string&quot;&gt;
+                &lt;/member&gt;
+                &lt;member name=&quot;deviceId&quot; type=&quot;nonBasic&quot; nonBasicTypeName=&quot;org::qeo::DeviceId&quot;&gt;
+                &lt;/member&gt;
+            &lt;/struct&gt;
+       &lt;/module&gt;
+&lt;/types&gt;</pre>
+</div></div><p><span style="font-size: 1.2em;"> </span><span style="line-height: 13.0pt;font-size: 10.0pt;">For more information about the contents and structure of this QDM, refer to <a href="Structure-of-a-QDM_21676179.html">Structure of a QDM</a>. To learn how this QDM was built, read the <a href="21676173.html">Tutorial: Creating the MediaEndPoint QDM</a>. </span></p><h4 id="BasicsoftheQeoDataModel(QDM)-MoreExamples">More Examples</h4><p><span style="line-height: 13.0pt;font-size: 10.0pt;">The QDMs of the sample applications are delivered with the SDK. They are located in the </span><strong style="line-height: 13.0pt;font-size: 10.0pt;">qdms&gt;qdm&gt;samples</strong><span style="line-height: 13.0pt;font-size: 10.0pt;"> subfolder. </span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676180/21958626.jpg">qdm-in-dev-proc.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676180/21958627.jpg">mediaendpoint.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676180/21958628.jpg">indepvsdep.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676180/21958629.ai">QDM artwork.ai</a> (application/postscript)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

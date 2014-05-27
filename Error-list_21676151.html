@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Error list</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API_21676144.html">REST API</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API-Reference-Documentation_21676149.html">REST API Reference Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Error list
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="Errorlist-AboutErrorResponse">About Error Response</h4><p>Every REST request you send can return an error response. <br />All returned errors use the standard HTTP error code syntax with a more detailed error description in the returned body.</p><h4 id="Errorlist-BodyLayout">Body Layout</h4><p>The body has the same layout for every returned error response:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">JSON formated UTF-8 string {&quot;status&quot;:...,&quot;code&quot;:...,&quot;message&quot;:&quot;...&quot;}</pre>
+</div></div><p>Parameters:</p><p>It uses the following parameters:</p><ul><li> <span style="color: rgb(0,0,255);"><strong>status</strong>:</span> this parameter follows the HTTP error code returned by the server</li><li><span style="font-size: 10.0pt;line-height: 13.0pt;"><span style="color: rgb(0,0,255);"><strong> code</strong></span>: this parameter is composed as status + internal number, it provides a more fine grained error specification</span></li><li><span style="font-size: 10.0pt;line-height: 13.0pt;"> </span> <span style="color: rgb(0,0,255);"><strong>message</strong></span>: human readable string (English only) associated with the error code</li></ul><h4 id="Errorlist-Example">Example</h4><p>Below is an example of an error message:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Error Example</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">HTTP 401: Unauthorized
+ 
+{
+   &quot;status&quot;:401,
+   &quot;code&quot;:4010,
+   &quot;message&quot;:&quot;invalid authorization token&quot;
+}</pre>
+</div></div><h4 id="Errorlist-PossibleErrorCodes"> Possible Error Codes</h4><p>The list of the possible error codes is shown below:</p><div class="table-wrap"><table class="confluenceTable"><tbody><tr><th style="text-align: center;" class="confluenceTh">HTTP status code</th><th style="text-align: center;" class="confluenceTh">status</th><th style="text-align: center;" class="confluenceTh">code</th><th style="text-align: center;" class="confluenceTh">message</th></tr><tr><td style="text-align: center;" class="confluenceTd"> 400 Bad Request</td><td style="text-align: center;" class="confluenceTd">400</td><td style="text-align: center;" class="confluenceTd">4000</td><td class="confluenceTd">input contains invalid json </td></tr><tr><td style="text-align: center;" class="confluenceTd"> 400 Bad Request</td><td style="text-align: center;" class="confluenceTd">400</td><td style="text-align: center;" class="confluenceTd">4001</td><td class="confluenceTd">max number of realms reached </td></tr><tr><td style="text-align: center;" class="confluenceTd"> 400 Bad Request</td><td style="text-align: center;" class="confluenceTd">400</td><td style="text-align: center;" class="confluenceTd">4002</td><td class="confluenceTd">unknown realm / user combination</td></tr><tr><td style="text-align: center;" class="confluenceTd"> 400 Bad Request</td><td style="text-align: center;" class="confluenceTd">400</td><td style="text-align: center;" class="confluenceTd">4003</td><td class="confluenceTd">unknown realm id</td></tr><tr><td style="text-align: center;" class="confluenceTd">401 Unauthorized</td><td style="text-align: center;" class="confluenceTd">401</td><td style="text-align: center;" class="confluenceTd">4010</td><td class="confluenceTd">invalid authorization token</td></tr><tr><td style="text-align: center;" class="confluenceTd">401 Unauthorized</td><td style="text-align: center;" class="confluenceTd">401</td><td style="text-align: center;" class="confluenceTd">4011</td><td class="confluenceTd">missing authorization token</td></tr><tr><td style="text-align: center;" class="confluenceTd"><p>500 Internal Server error</p></td><td style="text-align: center;" class="confluenceTd">500</td><td style="text-align: center;" class="confluenceTd">5000</td><td class="confluenceTd"><p>Server software error occurred</p></td></tr></tbody></table></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

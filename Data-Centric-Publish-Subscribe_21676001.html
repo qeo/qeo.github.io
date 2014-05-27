@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Data-Centric Publish-Subscribe</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-System-Description_21675993.html">Qeo System Description</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Exploring-Qeo-Concepts_21675997.html">Exploring Qeo Concepts</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Data-Centric Publish-Subscribe
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 class="BlockLabel" id="Data-CentricPublish-Subscribe-ProblemswithaDistributedEnvironment">Problems with a Distributed Environment</h4><p>As stated before, Qeo's goal is to enable the sharing of information between devices. There are, however, a number of factors complicating this:</p><ul><li class="BulletedList1">Initially, which entities will be interested in the provided information is unknown.</li><li class="BulletedList1">The composition of the network is highly variable: portable devices may come and go, even static devices may be powered on or off at the whim of the user.</li><li class="BulletedList1">The network may be unreliable and slow (wireless networks with bad reception, devices going to sleep...).</li></ul><h4 class="BlockLabel" id="Data-CentricPublish-Subscribe-ThePublish/SubscribeParadigm">The Publish/Subscribe Paradigm</h4><p>The publish/subscribe paradigm, adopted by Qeo, can alleviate a lot of these problems. It introduces the notion of a <em>Topic</em> as a logical channel that groups related information. Information providers (henceforth called <em>Publishers</em>) publish information on a Topic, while information consumers (henceforth called <em>Subscribers</em>) subscribe to a Topic. By subscribing to a Topic, Subscribers will receive all the information that is published on the Topic.</p><p>This setup conceptually decouples Publishers and Subscribers in</p><ul><li class="BulletedList1"><strong>Space:</strong> Publishers and Subscribers needn't be aware of each other's location or addressing information. They needn't even be aware of each other's existence.</li><li class="BulletedList1"><strong>Time:</strong> there is no synchronization between Publishers and Subscribers. Publishers write to the Topic whenever they have some information to share, Subscribers consume information from the Topic at their leisure. Depending on the behavioural configuration of the Topic, Publishers and Subscribers needn't even be active at the same time for communication to succeed.</li></ul><h4 class="BlockLabel" id="Data-CentricPublish-Subscribe-Data-centricity">Data-centricity</h4><p>The plain publish/subscribe paradigm does not attach any meaning to the actual content of the messages it disseminates: it is up to the subscriber to make sense of them. Qeo goes one step further: it implements the data-centric publish/subscribe pattern.</p><p>The key insight in data-centricity is that Publishers are basically exposing their state to the world, while Subscribers are trying to reconstruct this state from the messages they receive. In data-centric communication, the middleware does not distribute messages about the state, but rather it maintains a global view of the state on behalf of the information consumers.</p><p>For data-centric publish/subscribe, this translates to the following:</p><ul><li class="BulletedList1">Topics have an associated data type, and represent only objects of this type</li><li class="BulletedList1">Publishers write the current state of an object to the Topic</li><li class="BulletedList1">The middleware ensures that Subscribers get a consistent view of the objects published on the Topic</li></ul><p>This approach is directly beneficial for the efficiency of communication, as the middleware can now interpret the meaning of messages that are sent, and (based on the behavioural configuration of the Topic) decide to drop certain messages that are not (or no longer) relevant.</p><p>There is an even more important advantage to data-centricity: it promotes the reusability of the information that is shared. Instead of sending out messages that are relevant only to a particular use case, the information providers in a data-centric world publish facts about the world, and any information consumer can interpret those facts and derive from them the information it needs.</p><h4 class="BlockLabel" id="Data-CentricPublish-Subscribe-TopicsandDataTypesinQeo">Topics and Data Types in Qeo</h4><p>In Qeo, Topics and Data Types are tightly coupled. For each Topic, a specific Data Type is designed. These data types reside in a namespace (e.g. org.qeo.wifi) and have a name (e.g. Station). The fully qualified name of the data type (e.g. <em>org.qeo.wifi.Station</em>) is used as the Topic identifier, thus ensuring a one-to-one correspondence between Topics and Data Types.</p><h4 class="BlockLabel" id="Data-CentricPublish-Subscribe-InstancesandKeys">Instances and Keys</h4><p>Data Types are defined as composite (and possibly nested) structures. A subset of the fields of a data type may be marked as Key fields. Analogous to relational databases, this means that the combination of the values of these fields serves to uniquely identify an object instance on the Topic. Multiple publications on the Topic that have the same key fields are considered sequential updates of the state of a single object. Data types may also be keyless, which means that all values published to the Topic are considered to be subsequent updates of the singular object instance on this Topic. </p><h4 class="BlockLabel" id="Data-CentricPublish-Subscribe-QeoDataModel(QDM)">Qeo Data Model (QDM)</h4><p>Qeo is not tied to a particular programming language. In order to facilitate the reuse of data types across implementation languages, data types can be defined in a language-independent XML description language. Such an XML data type description is called a Qeo Data Model (QDM).</p><p>Code generators translate these descriptions into language-specific data structures.</p><p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

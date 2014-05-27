@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Semantic Rules</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Best-Practices_21676166.html">Best Practices</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Semantic Rules
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="SemanticRules-GeneralRulesofThumb">General Rules of Thumb</h4><p>There are three general rules of thumb to take into account when designing a QDM:</p><h5 id="SemanticRules-Useyourcommonsense">Use your common sense</h5><p>Try to find the most elegant and economical way to represent your particular use case. While the Internet provides us with lots of rules, they may not always be ideal for your model.</p><h5 id="SemanticRules-DocumentyourQDMtoremoveallambiguities">Document your QDM to remove all ambiguities </h5><p><span style="color: rgb(0,0,0);">The XML syntax Qeo uses for defining data models is excellently suited for expressing the <em>structure </em>of the data model, but it cannot capture the meaning of interactions in the data model. For example:</span></p><ul><li style="list-style-type: none;background-image: none;"><ul><li>What is the interpretation of each field in the data structure?</li><li>Do some values have a special interpretation (e.g. setting an ID field to 0 may mean a request for the disposal of a certain instance)?</li><li>What is the expected correlation between fields?</li></ul></li></ul><p>Therefore, you need to properly document your QDM. Use the<strong> &lt;doc&gt;</strong> element to do so. A QDM's documentation should allow any other developer to write components that flawlessly interface and inter-operate with it. </p><h5 id="SemanticRules-Beconsistent">Be consistent</h5><p>Use similar names for similar entities.</p><h4 id="SemanticRules-PublishAbsoluteFacts,notRelativeData">Publish Absolute Facts, not Relative Data</h4><p>It is important to keep in mind that in a publish-subscribe system, one publishes information for <em>asynchronous </em>consumption. We strive to avoid request-response patterns as much as possible.</p><p>Therefore, it is best to design your data model in such a way that you publish absolute facts about your system, instead of relative data.</p><p>This concept is best illustrated with an example. Suppose you want to model the DHCP leases supplied by your DHCP server. In particular, for each lease you want to know how long it remains valid. In a request-response oriented system, it makes perfect sense to model this as a parameter called leaseTimeRemaining, which gives you the time in seconds this lease remains valid. For each request, you get a response that reflects accurately the lifetime this lease has left. In a publish-subscribe system, however, this model breaks down: the publisher has to update the state of each lease every second, because after a second the leaseTimeRemaining has changed, and the published information is out of date. Instead, it is better to model a DHCP lease as having an absolute endTime, which is a timestamp that tells us when the lease will expire. This absolute information remains valid for the entire lifetime of the lease, and must be published only once.</p><h4 id="SemanticRules-Don&#39;tUseOpaqueStringsorByteArraystoHideYourData">Don't Use Opaque Strings or Byte Arrays to Hide Your Data</h4><p>Qeo offers you a rich type definition language that allows you to define a data type that accurately reflects all the information you want to provide in your data model. Make use of this facility. Do not define your data model as a single string in which you marshal all domain information yourself (e.g. in JSON format). There are several reasons for this:</p><ul><li>Qeo incorporates an efficient binary marshaling system. Rolling your own is just duplicate work.</li><li>Thanks to Qeo's code generator, the rich data types you use on the wire are automatically translated to the equivalent data structures in your implementation language of choice.</li><li>In the future, Qeo will include powerful querying and filtering features for data readers. On all kinds of readers, you'll be able to specify a filter expression that automatically drops all data you're not interested in. On StateReaders, you'll be able to retrieve instances based on an SQL-like query language (e.g. &quot;get all instances where x &gt; 5&quot;). These features are currently under development, and they rely on the fact that Qeo knows the structure of your data type. If you hide away all semantically interesting information in some opaque member field, the query and filter mechanisms will be unavailable to you.</li></ul><h4 id="SemanticRules-StateTopicsareLikeRelationalDatabaseTables">State Topics are Like Relational Database Tables</h4><p>It can be very helpful to consider <em>state</em> topics as the equivalent of a table in a relational database. Instances on the topic are rows in the table, member fields translate to columns in the table. The key fields of the topic correspond to a table's <em>primary key</em>. Instances on a topic can refer to instances on other topics by including the key fields of this other topic, akin to a database table's <em>foreign key</em>.</p><p>From this point of view, we immediately have a whole set of well-known tools and techniques at our disposal to aid in datamodel design:</p><ul><li>Entity-Relationship diagrams</li><li>Database normalization techniques (First, Second, Third, ... Normal Form)</li></ul><p>However, like any analogy, this one breaks when you stretch it too far:</p><ul><li>&quot;real&quot; First Normal Form already forbids struct members that are themselves collections (sequences) or aggregate types (structures). On Qeo, it may make sense to use sequences and structures in some cases.</li><li>Qeo does not guarantee referential integrity. When an instance disappears, instances on other topics that refer to it through their foreign keys are not automatically removed.</li></ul><p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

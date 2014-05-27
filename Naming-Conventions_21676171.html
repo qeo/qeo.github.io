@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Naming Conventions</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Best-Practices_21676166.html">Best Practices</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Naming Conventions
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="NamingConventions-Java-likeRulesandConventions">Java-like Rules and Conventions</h4><p>Even though QDMs are language-independent, Java naming rules provide an excellent guide for naming namespaces, data types and fields. We recommend therefore to adhere to these rules as much as possible. The rules are described here:</p><p><a href="http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-135099.html" class="external-link" rel="nofollow">http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-135099.html</a>. </p><p>Below is an overview of how these naming conventions apply to Qeo:</p><h5 id="NamingConventions-Namespace(Module)">Namespace (Module)</h5><p>Use the following rules of thumb:</p><ul><li>Use only lowercase characters in namespace identifiers</li><li>Start each namespace with your domain name in reverse</li><li>Use <em>org::qeo::*</em> only for standardized models destined for the official QDM repository</li></ul><h5 id="NamingConventions-Struct">Struct</h5><p>Use the following rules:</p><ul><li><p>Use UpperCase for type names</p>    <div class="aui-message problem shadowed information-macro">
+                            <span class="aui-icon icon-problem">Icon</span>
+                <div class="message-content">
+                            <p>This is actually more than a rule of thumb. The use of capitals is required and enforced by the Code Generator.</p>
+                    </div>
+    </div>
+</li><li>Type names should be nouns or concatenations of nouns</li></ul><p>Use the following rules of thumb:</p><ul><li><span>Avoid useless words in the name</span></li><li><span>Do not repeat information that is already apparent from the module name, <br />e.g.: In the Media Endpoint example, we use <em>Endpoint</em> as struct name within the Media module and not <em>MediaEndpoint</em>, since this would repeat the <em>media</em> part</span></li><li><span>Do not add <em>State</em> or <em>Event </em>to the name to mark a struct's behavior.</span></li></ul><h5 id="NamingConventions-StructMemberFieldNames">Struct Member Field Names</h5><p>Use the following rules of thumb:</p><ul><li>Avoid the use of underscores</li><li>Use lowerCamelCase for member names</li></ul><h5 id="NamingConventions-Example">Example</h5><p><span style="color: rgb(0,0,0);">Consider the example below::</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: html/xml; gutter: false" style="font-size:12px;">&lt;module name=&quot;com::technicolor::MediaEndpoint&quot;&gt;
+	&lt;struct name=&quot;MediaEndpoint&quot;&gt;
+		&lt;member name=&quot;mediaEndpointId&quot; type=&quot;string&quot; key=&quot;true&quot;&gt;</pre>
+</div></div><p>This example violates the above rules in a number of ways:</p><ul><li>the namespace com::technicolor::MediaEndpoint is not in all-lowercase</li><li>useless repetition: the words &quot;media endpoint&quot; appear in the namespace, the type name <em>and </em>the member name. Based on this example, the Qeo code generator will generate a C struct called com_technicolor_MediaEndpoint_MediaEndpoint whose first member will be a field called mediaEndpointId. Developers working with the above data model will for sure appreciate a more concise naming scheme.</li></ul><p><span style="font-size: 10.0pt;line-height: 13.0pt;">A better way to define the above model is:</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: html/xml; gutter: false" style="font-size:12px;">&lt;module name=&quot;com::technicolor::media&quot;&gt;
+	&lt;struct name=&quot;Endpoint&quot;&gt;
+		&lt;member name=&quot;id&quot; type=&quot;string&quot; key=&quot;true&quot;&gt; </pre>
+</div></div><p>This model u<span style="font-size: 10.0pt;line-height: 13.0pt;">ses unique names.</span></p><h4 id="NamingConventions-Language-relatedGuidelines">Language-related Guidelines</h4><h5 id="NamingConventions-UseofAcronymsandInitialismsinCamelCaseIdentifiers">Use of Acronyms and Initialisms in Camel Case Identifiers</h5><p>Often, type or member names will include some kind of acronym or initialism (e.g. HTML, DB, IPaddress, ...). The Qeo convention is to treat these acronyms as &quot;regular&quot; words, subject to the regular camel case rules.</p><p>For example:</p><ul><li>if you define a type that represents an HTML file, call it &quot;HtmlFile&quot;, <em>not</em> &quot;HTMLFile&quot;</li><li>if you define a struct member that represents an IP address, call it &quot;ipAddress&quot;, <em>not</em> &quot;IPAddress&quot; or &quot;iPAddress&quot;.</li></ul><h5 id="NamingConventions-Don&#39;tUseGratuitousAbbreviations">Don't Use Gratuitous Abbreviations</h5><p>If you use abbreviations in type or member names, do so only if the abbreviation is widely understood and commonly used. It's perfectly fine to use HTML or IP as abbreviations, but don't use &quot;temp&quot; instead of &quot;temperature&quot;.</p><h5 id="NamingConventions-LanguageandSpelling">Language and Spelling</h5><p>In general, use English words for identifiers. Always use U.S. English spelling when there are different ways to spell a given word.</p><p>For example:</p><ul><li>use <em>caliber</em> instead of <em>calibre</em></li><li>use <em>license</em> instead of <em>licence</em></li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

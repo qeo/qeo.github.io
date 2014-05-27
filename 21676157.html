@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : /realms/{id}/users  (GET)</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API_21676144.html">REST API</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API-Reference-Documentation_21676149.html">REST API Reference Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : /realms/{id}/users  (GET)
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="table-wrap"><table class="confluenceTable">
+<tbody>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>Description:</strong></td>
+<td class="confluenceTd">Retrieve all users within a realm of a Qeo administrator </td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>URL Structure:</strong></td>
+<td class="highlight-grey confluenceTd" data-highlight-colour="grey"><span class="nolink"><strong><span class="nolink"><span class="nolink"><a rel="nofollow">https://my.qeo.org/qeo-rest-service/v1/realms/{id}/users</a></span>  </span></strong></span></td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>HTTP Method:</strong></td>
+<td class="confluenceTd">GET</td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>Parameters:</strong></td>
+<td class="confluenceTd">
+<p>HTTP Authorization</p>
+<p><strong>Path parameter:</strong><br />    identifier of the realm to be interrogated (value is of type long)</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Request Example</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">https://my.qeo.org/qeo-rest-service/v1/realms/103/users  </pre>
+</div></div></td></tr>
+<tr>
+<td style="TEXT-ALIGN: right;" class="confluenceTd"><strong>Response:</strong></td>
+<td class="confluenceTd">
+<p>HTTP 200 OK <br />Content-Type: application/json</p>
+<p>Body: Contains a list of users found in the realm in JSON format<br />          {&quot;users&quot;:[{&quot;id&quot;:...,&quot;realm&quot;:...,&quot;type&quot;:&quot;user&quot;,&quot;name&quot;:&quot;...&quot;},{...},{...}]}</p>
+<p>          The returned parameters per user in the list: <br />              &quot;id&quot;       : value of type long, representing the user identifier<br />              &quot;type&quot;   : type of object returned (always &quot;user&quot;)<br />              &quot;realm&quot; : value of type long, represents the realm identifier<br />              &quot;name&quot; : UTF-8 string representing the name of the user in the realm</p>
+<p> </p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Response Example</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">{
+   &quot;users&quot;:[{
+              &quot;id&quot;:3,
+              &quot;realm&quot;:103,
+              &quot;type&quot;:&quot;user&quot;,
+              &quot;name&quot;:&quot;Martin&quot;
+            },{
+              &quot;id&quot;:4,
+              &quot;realm&quot;:103,
+              &quot;type&quot;:&quot;user&quot;,
+              &quot;name&quot;:&quot;Benny&quot;
+            },{
+              &quot;id&quot;:5,
+              &quot;realm&quot;:103,
+              &quot;type&quot;:&quot;user&quot;,
+              &quot;name&quot;:&quot;Sandra&quot;
+            }]
+}</pre>
+</div></div></td></tr></tbody></table></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

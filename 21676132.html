@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Qeo C (Native) Developer Guide</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Developer-Guide_21676089.html">Qeo Developer Guide</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Qeo C (Native) Developer Guide
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="QeoC(Native)DeveloperGuide-Scope">Scope</h4><p>This document is not a complete guide on how to do development in C. It provides details specific to developing Qeo-enabled applications.</p><h4 id="QeoC(Native)DeveloperGuide-GettingStarted">Getting Started</h4><p><span>Here is what you can do to get started:</span></p><h5 id="QeoC(Native)DeveloperGuide-1.GetacquaintedwithQeo"><span>1. Get acquainted with Qeo</span></h5><p><span>Before you can do any kind of development in Qeo, you need to familiarize yourself with its concepts and structure. To do this, read the documents in the <a href="General-Documents_21675992.html">General Documents</a> section. Specifically, you should start with the <a href="Qeo-System-Description_21675993.html">Qeo System Description</a> for a general outline of Qeo and the <a href="Introduction-to-Qeo-Security_21676007.html">Introduction to Qeo Security</a> for a description of its security setup and contents. If you get lost in concepts, consult the <a href="Qeo-Glossary_21676015.html">Qeo Glossary</a>.</span></p><h5 id="QeoC(Native)DeveloperGuide-2.DownloadandInstalltheQeoSDK"><span>2. Download and Install the Qeo SDK</span></h5><p><span>If you have not done so yet, now is the time to <a href="http://wiki.developer-partnersalliance.com/display/QeoDevSpace/SDK+Download+Page" class="external-link" rel="nofollow">download </a>and <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=Installing+the+Qeo+SDK&amp;linkCreation=true&amp;fromPageId=21676132">install</a>  the latest version of the Qeo SDK. </span></p><h5 id="QeoC(Native)DeveloperGuide-3.LearnhowtousetheQeoSDKforCdevelopment"><span>3. Learn how to use the Qeo SDK for C development</span></h5><p><span>You can find specific information on how to use the Qeo SDK for development  in C here: <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=Using+the+Qeo+SDK+for+C&amp;linkCreation=true&amp;fromPageId=21676132">Using the Qeo SDK for C</a>.</span></p><h5 id="QeoC(Native)DeveloperGuide-4.InstallandgetacquaintedwiththeQeosamplesforC"><span>4. Install and get acquainted with the Qeo samples for C</span></h5><p><span>Next, you need to familiarize yourself with the specifics of developing Qeo-enabled applications for Android. To help you do this, we provided a number of sample applications. Below is an overview:</span></p><ul><li><strong>QSimpleChat Applications: <br /></strong><span>Basic chat applications. The purpose of the QSimpleChat applications is to show you how you can build a simple messaging system using Qeo. Step by step extra functionality is added. We recommend you start here. <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=QSimpleChat&amp;linkCreation=true&amp;fromPageId=21676132">QSimpleChat</a> provides the basics for using Readers and Writers. <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=QSimpleChat-policy&amp;linkCreation=true&amp;fromPageId=21676132">QSimpleChat-policy</a> provides a more complex design using <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=How+to+Define+a+Policy&amp;linkCreation=true&amp;fromPageId=21676132">Qeo Policies</a>.</span></li></ul><ul><li><span><strong>QGauge:</strong><br /><a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=QGauge+App&amp;linkCreation=true&amp;fromPageId=21676132">This application</a> is more complex and monitors the throughput of the network interfaces of different devices in your network in real time. This demo illustrates how the Qeo State behaviour can be used to implement the <em>Observer Pattern</em> for real-time monitoring.<br /> </span></li><li><span><strong>QWebview:</strong><br /><a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=QWebview+App&amp;linkCreation=true&amp;fromPageId=21676132">This application</a> provides a simple webview in which you can incorporate Qeo-enabled Javascript-applications on your device using QT WebView. For more information on Qeo-enabled JavaScript Development, refer to <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=Qeo+JavaScript+Developer+Guide&amp;linkCreation=true&amp;fromPageId=21676132">Qeo JavaScript Developer Guide</a>.</span></li></ul><h5 id="QeoC(Native)DeveloperGuide-5.PrepareyourdevicesforQeo">5. Prepare your devices for Qeo</h5><p>You need to take certain steps for your your devices to be able to run Qeo applications. Go here for more details: <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=C+Porting+Information&amp;linkCreation=true&amp;fromPageId=21676132">C Porting Information</a>.</p><h5 id="QeoC(Native)DeveloperGuide-6.MakeyourapplicationsQeoenabled">6. Make your applications  Qeo enabled</h5><p>Before you can start developing Qeo-enabled applications , you need to know how to make them Qeo-enabled. For more information on this, go here: <a href="Start-Developing-a-Qeo-Enabled-Application-in-C_21676133.html">Start Developing a Qeo Enabled Application in C</a>. </p>    <div class="aui-message problem shadowed information-macro">
+                            <span class="aui-icon icon-problem">Icon</span>
+                <div class="message-content">
+                            <p>STUFF TO DO AFTER APPROVAL OF THIS APPROACH</p><p>Move the &quot;Making Your C Application Qeo Enabled&quot; section as a child to this page. Replace the link in <strong>6. Make ...Qeo Enabled</strong> with a content overview of that section to the number 5 step. Remove the current top page of that section so this becomes the top page. Add a short description of each subsection.</p>
+                    </div>
+    </div>
+<h4 id="QeoC(Native)DeveloperGuide-UsingQeoDataModelsandtheCodeGenerator">Using Qeo Data Models and the Code Generator</h4><p>Qeo is a data-centric system. This means that your applications will be reading or publishing pieces of information. An important part of designing data-centric applications is modelling the data it will exchange. One of the major advantages of Qeo is that you are able to model your data indepently from your chosen development environment and language and automatically translate it into matching code, in this case Android code:</p><ol><li> To model the data, use the Qeo Data Model. To get acquainted with it, read the <a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a>. <br /> </li><li>To translate your QDMs into C Code, use the <a class="createlink" href="/pages/createpage.action?spaceKey=QND&amp;title=Code+Generator+User+Guide&amp;linkCreation=true&amp;fromPageId=21676132">Code Generator</a>. </li></ol><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p><p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

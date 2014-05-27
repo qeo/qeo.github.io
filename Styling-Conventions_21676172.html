@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Styling Conventions</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Best-Practices_21676166.html">Best Practices</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Styling Conventions
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="StylingConventions-UseWell-knownNamesandTypesforCommonConcepts">Use Well-known Names and Types for Common Concepts</h4><p>Throughout all QDMs, we strive to have similar information and concepts represented in a similar way. This reduces the amount of effort needed to understand a &quot;new&quot; data model, and makes data models more self-documenting.</p><h5 id="StylingConventions-AtTypeNameLevel">At Type Name Level</h5><div class="table-wrap"><table class="confluenceTable"><tbody><tr><th class="confluenceTh">Concept</th><th class="confluenceTh">Convention</th></tr><tr><td class="confluenceTd">Type/Topic naming for Directed State Pattern (see <a href="State-versus-Event_21676167.html">State versus Event</a>)</td><td class="confluenceTd"><ul><li>Give the &quot;current state&quot; topic a descriptive name (e.g. Actuator, BlacklistEntry, ...)</li><li>For the &quot;desired state&quot; topic, append &quot;Request&quot; to the name of the &quot;current state&quot; topic (e.g. ActuatorRequest, BlacklistEntryRequest, ...)</li></ul></td></tr></tbody></table></div><p> </p><h5 id="StylingConventions-AtTypeMemberLevel">At Type Member Level</h5><div class="table-wrap"><table class="confluenceTable"><tbody><tr><th class="confluenceTh">Concept</th><th class="confluenceTh">Convention</th></tr><tr><td class="confluenceTd">Unique ID as topic key</td><td class="confluenceTd"><ul><li>call the field &quot;id&quot;</li><li>use org::qeo::UUID as the field type</li></ul></td></tr><tr><td class="confluenceTd">Reference to an instance on another topic</td><td class="confluenceTd"><ul><li>Duplicate the other topic's key fields as member fields in your topic</li><li>Special case: if the referenced topic's key is a UUID, call your field &lt;referencedTopicName&gt;Id<br />e.g. we're referencing an instance on the Actuator topic, so we call our field &quot;actuatorId&quot; </li></ul></td></tr><tr><td class="confluenceTd">Date/time value</td><td class="confluenceTd"><ul><li>use an int64, which represents seconds since the Unix epoch (Jan 1, 1970) in UTC format (i.e. it does not take time zones or daylight saving time into account)</li></ul></td></tr><tr><td colspan="1" class="confluenceTd">Duration/time interval</td><td colspan="1" class="confluenceTd"><ul><li>use an int32</li><li>default precision is seconds, if more precision is needed, indicate the relevant SI prefix (milli, micro, ...) in member name</li></ul></td></tr><tr><td colspan="1" class="confluenceTd">IPv4 address</td><td colspan="1" class="confluenceTd"><ul><li>use a string</li><li>use dotted-quad notation, all decimal, no leading zeros</li></ul></td></tr><tr><td colspan="1" class="confluenceTd">IPv6 address</td><td colspan="1" class="confluenceTd"><ul><li>use a string</li><li>use canonical form (see RFC 5952)</li></ul></td></tr><tr><td colspan="1" class="confluenceTd">Ethernet MAC address</td><td colspan="1" class="confluenceTd"><ul><li>use a string</li><li>use canonical form: lowercase hex digits, separated by dashes (not colons) (e.g. 12-34-56-78-90-ab, <em>not</em> 12:34:56:78:90:AB)</li></ul></td></tr></tbody></table></div><h4 id="StylingConventions-RepresentingNon-IntegralQuantities">Representing Non-Integral Quantities</h4><p>Where possible, avoid the use of floating point numbers in data models. Qeo is targeted to run on embedded platforms, which typically have limited or no hardware support for floating point calculations. If feasible, choose a fixed-point representation with known precision, and use an integral type to represent your quantity.</p><p>For physical quantities, use the SI unit prefixes (milli, micro, mega, ...) to denote the precision of your field.</p><h4 id="StylingConventions-RepresentingPhysicalQuantities">Representing Physical Quantities</h4><p>Do not allow individual publishers of a data model to choose the unit in which a given physical quantity is represented. State the physical unit, and its precision, upfront in the QDM. Where possible, stick to SI units, and use an integral type to represent the quantity with a known precision (e.g. magnetism in nanoTesla, length in millimeters, ...).</p><h4 id="StylingConventions-RepresentingEnumerations">Representing Enumerations</h4><p>Often, your data model will contain information that's really best modeled as an enumeration (the state of a Finite State Machine, the wifi channel your access point is operating on, ...). </p>    <div class="aui-message warning shadowed information-macro">
+                            <span class="aui-icon icon-warning">Icon</span>
+                <div class="message-content">
+                            <p>At this point, Qeo does not yet support enumerations, but this feature will be added later. For now, it is good practice to model enumerations as an int32 field, and clearly explain the meaning of each value of the enumeration in documentation.</p><p><span>It is best not to use strings to represent enumeration values because:</span></p><ul><li>it takes more bandwidth to send strings over the network</li><li>integer values are easier to map to the native enum type in your favorite programming language</li></ul>
+                    </div>
+    </div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : The Perimeter of Qeo Interaction</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="General-Documents_21675992.html">General Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-System-Description_21675993.html">Qeo System Description</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Exploring-Qeo-Concepts_21675997.html">Exploring Qeo Concepts</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : The Perimeter of Qeo Interaction
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 class="BlockLabel" id="ThePerimeterofQeoInteraction-IPConnectivity">IP Connectivity</h4><p>The Qeo communications framework is built on top of the traditional TCP/IP stack. This limits Qeo interaction to devices that are IP-connected. At first sight, this statement excludes a lot of interesting sources of information from Qeo: home automation sensors and actuators typically communicate over non-IP networks (e.g. Zigbee or Z-Wave). These sources of information are too valuable to exclude from Qeo; so naturally, it provides a way to make them available in the Qeo realm.</p><h4 class="BlockLabel" id="ThePerimeterofQeoInteraction-Bridging">Bridging</h4><p>The solution to this problem is to create bridging components: components that bridge the divide between Qeo and some other ecosystem, which bi-directionally translate information and interactions between Qeo and the secondary ecosystem. For example, data exchanges within a Zigbee mesh will typically end up in some sort of hub component that makes sense of the incoming information and sends out commands to the actuators. If this hub device is IP-connected, it can translate all the incoming information into standardized Qeo data models, and publish this information onto Qeo, thus making the wealth of information in this closed-off ecosystem available to a much wider audience.</p><p>This bridging strategy brings along the opportunity for real cross-ecosystem interoperability. For example, the Zigbee and Z-Wave ecosystems tackle overlapping problem domains, but each uses its own data model to represent the available information and interactions. By judiciously defining the standardized QDM data models for this same subject matter (e.g. temperature, lighting, etc.), Qeo bridges for each of these ecosystems can uniformly represent information and interactions. This will enable scenarios where e.g. a Z-Wave pushbutton is used to control a Zigbee light socket with Qeo as an intermediary. </p><h4 class="BlockLabel" id="ThePerimeterofQeoInteraction-TheQeoRealm">The Qeo Realm</h4><p>Even with the limitation of IP connectivity, we need to put stronger boundaries on Qeo interaction between devices. From both the scalability and privacy points of view, we need to limit which devices can share information with each other.</p><p>What devices exactly are contained within a user's personal information sphere? A non-exhaustive list includes:</p><ul><li class="BulletedList1">Consumer electronics devices in the home (gateway, set-top box, smart TV, IP-connected thermostat, etc.)</li><li class="BulletedList1">Mobile devices, both personal (cell phones) and shared (tablets)</li><li class="BulletedList1">General-purpose computers (PCs, laptops, perhaps a user's computer at work)</li><li class="BulletedList1">Information stores in the cloud (e.g. a cloud-hosted calendar or the Video-on-Demand service operated by the user's ISP)</li></ul><p>Clearly, this rules out a simple perimeter like &quot;the user's home LAN&quot; as the boundary for useful Qeo interaction. Instead, Qeo relies on the user to define the boundaries of interaction. Users must explicitly include devices (or individual applications on general-purpose, multi-user devices like PCs) into their Qeo Realm.</p><p>A <em>Qeo Realm</em> can therefore be defined as <em>a set of devices and applications that can exchange information over Qeo</em>. The boundaries set by the user will be enforced through Qeo's security framework. </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

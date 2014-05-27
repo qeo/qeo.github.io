@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : /realms/{id}/devices  (POST)</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API_21676144.html">REST API</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="REST-API-Reference-Documentation_21676149.html">REST API Reference Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : /realms/{id}/devices  (POST)
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="table-wrap"><table class="confluenceTable"><tbody><tr><td style="text-align: right;" class="confluenceTd"><strong>Description:</strong></td><td class="confluenceTd">Create or modify a single device of a user within a realm of a Qeo administrator</td></tr><tr><td style="text-align: right;" class="confluenceTd"><strong>URL Structure:</strong></td><td class="highlight-grey confluenceTd" data-highlight-colour="grey"><span class="nolink"> <strong> <span class="nolink"> <span class="nolink"> <span class="nolink"> <span class="nolink"> <a rel="nofollow">https://my.qeo.org/qeo-rest-service/v1/realms/{id}/devices</a> </span> </span>  </span> </span> </strong> </span> </td></tr><tr><td style="text-align: right;" class="confluenceTd"><strong>HTTP Method:</strong></td><td class="confluenceTd">POST</td></tr><tr><td style="text-align: right;" class="confluenceTd"><strong>Parameters:</strong></td><td class="confluenceTd"><p>HTTP Authorization</p><p><strong>Path parameter:</strong> <br />    identifier of the realm (value is of type long)</p><p><strong>For a Create:</strong> <br />     Body: Must contain the device name and de user identifier<br />              {&quot;user&quot;:...,&quot;name&quot;:&quot;...&quot;}</p><p>               Parameter:<br />                   &quot;user&quot;  : value of type long, identifier of the user where the device belongs to.<br />                   &quot;name&quot; : UTF-8 string representing the name of the device <br />                                 Leading and trailing spaces are removed from the name.<br />                                 The provided name cannot be empty.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Create Example</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">https://my.qeo.org/qeo-rest-service/v1/realms/103/devices 
+ 
+{
+   &quot;user&quot;:12345,
+   &quot;name&quot;:&quot;Bedroom set-top box&quot;
+}
+
+</pre>
+</div></div><p><strong>For a Modify:</strong> <br />     Body: Must contain the device name the device identifier and the associated user identifier<br />              {&quot;id&quot;:...,&quot;user&quot;:...,&quot;name&quot;:&quot;...&quot;}</p><p>              Parameters:<br />                 &quot;id&quot;       : value of type long, representing the device identifier<br />                 &quot;user&quot;   : value of type long, identifier of the user where the device belongs to.<br />                 &quot;name&quot; : UTF-8 string representing the name of the device<br />                               Leading and trailing spaces are removed from the name.<br />                               The provided name cannot be empty.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Modify Example</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">https://my.qeo.org/qeo-rest-service/v1/realms/103/devices 
+ 
+{
+   &quot;id&quot;:5545,
+   &quot;user&quot;:12345,
+   &quot;name&quot;:&quot;Bedroom set-top box&quot;
+}
+
+</pre>
+</div></div></td></tr><tr><td style="text-align: right;" class="confluenceTd"><strong>Response:</strong></td><td class="confluenceTd"><p><strong>For a Create:</strong> <br /> HTTP 201 Created<br /> Content-Type: application/json</p><p><strong>For a Modify:</strong> <br /> HTTP 200 OK<br /> Content-Type: application/json</p><p>Body: Contains the created/modified device in JSON format as it is stored in the database:<br />         {&quot;id&quot;:...,&quot;realm&quot;:...,&quot;user&quot;:...,&quot;type&quot;:&quot;device&quot;,&quot;device_id&quot;:&quot;...&quot;,&quot;name&quot;:&quot;...&quot;,&quot;state&quot;:&quot;...&quot;,&quot;otc&quot;:{&quot;code&quot;:&quot;..&quot;,&quot;date&quot;:&quot;...&quot;} }</p><p>         The returned parameters for each device: <br />              &quot;id&quot;            : value of type long, representing the device identifier<br />              &quot;type&quot;        : type of object returned (always &quot;device&quot;)<br />              &quot;realm&quot;      : value of type long, represents the realm identifier where the device belongs to.<br />              &quot;user&quot;        : value of type long, representing the user identifier where the device belongs to.<br />              &quot;device_id&quot; : UTF-8 string representing the devices own identifier<br />              &quot;name&quot;      : UTF-8 string representing the name of the device in the realm<br />              &quot;state&quot;       : a device has a certain state: <br />                                &quot;CREATING&quot; : device is not yet enrolled, it is not yet ready to talk Qeo<br />                                &quot;ENROLLED&quot;: device is enrolled, it can talk Qeo <br />                                &quot;REVOKED&quot; : device is revoked, it can no longer talk Qeo<br />              &quot;otc&quot;    : - one time code to register your device and to place it in &quot;ENROLLED&quot; state.<br />                           - otc is only available in case your device is in state &quot;CREATING&quot;<br />                           - otc is valid for a short period of time<br />                           - otc is composed of: &quot;code&quot;: needed to register your device<br />                                                           &quot;date&quot;: creation date of the code, format:yyyy-MM-dd'T'HH:mm:ss.SSSZ<br />                                                                      yyyy: year<br />                                                                      MM: month in year<br />                                                                      dd: day of month <br />                                                                      HH: hour <br />                                                                      mm: minutes <br />                                                                      ss: seconds <br />                                                                      SSS: millisecond     <br />                                                                      Z: time zone</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Response Example</b></div><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">{
+   &quot;id&quot;:5545, 
+   &quot;realm&quot;:103,
+   &quot;user&quot;:12345,
+   &quot;type&quot;:&quot;device&quot;,
+   &quot;name&quot;:&quot;Bedroom set-top box&quot;,
+   &quot;state&quot;:&quot;CREATING&quot;,
+   &quot;device_id&quot;:&quot;&quot;,
+   &quot;otc&quot;:{
+           &quot;code&quot;:&quot;35676407&quot;,
+           &quot;date&quot;:&quot;2016-06-17T16:06:29.794+0200&quot;
+         }
+}</pre>
+</div></div></td></tr></tbody></table></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

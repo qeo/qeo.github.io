@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : Door Monitor</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="More-Examples_21676174.html">More Examples</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : Door Monitor
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="DoorMonitor-AboutDoorMonitor">About Door Monitor</h4><p>Door Monitor is an application that opens the corridor doors on Starship Qeo when a hand is held in front of a sensor. It uses an Event to indicate whether the door sensor was activated and a State to indicate whether the door is open or closed. For various reasons, the sensor is not (always) located next to the door..</p><p><img class="confluence-embedded-image" src="attachments/21676177/21958623.jpg" data-image-src="attachments/21676177/21958623.jpg"></p><h4 id="DoorMonitor-QDM">QDM</h4><p>Below is the QDM: </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;types xmlns=&quot;http://www.qeo.org/formal/2013/Qeo_Data_Model&quot; version=&quot;0.1&quot;&gt;
+&lt;include file=&quot;qeo_types.xml&quot;/&gt;
+&lt;module name=&quot;org::qeo::sample::doorexample&quot;&gt;
+	&lt;struct behavior=&quot;event&quot; name=&quot;DoorSensor&quot;&gt;
+		&lt;member name=&quot;userID&quot; type=&quot;org::qeo::UUID&quot; key=&quot;true&quot;&gt;
+		&lt;doc&gt;Unique ID of the activating user.&lt;/doc&gt;
+		&lt;/member&gt;
+		&lt;member name=&quot;doorID&quot; type=&quot;org::qeo::UUID&quot;
+		&lt;doc&gt;ID of door related to the sensor&lt;/doc&gt;
+		&lt;/member&gt;
+    &lt;/struct&gt;
+ 	&lt;struct behavior=&quot;state&quot; name=&quot;Door&quot;&gt;
+		&lt;member name=&quot;id&quot; type=&quot;org::qeo::UUID&quot;&gt;
+		&lt;doc&gt;Unique ID of the door. This ID is provided by the door client.&lt;/doc&gt;
+		&lt;/member&gt;
+		&lt;member name=&quot;open&quot; type=&quot;boolean&quot;&gt;
+		&lt;doc&gt;Status of the door. False equals closed, true equals opened.&lt;/doc&gt;
+		&lt;/member&gt;
+	&lt;/struct&gt;
+  &lt;/module&gt;
+&lt;/types&gt;</pre>
+</div></div><p><span style="line-height: 13.0pt;font-size: 10.0pt;">The sensor generates an event (DoorSensor) indicating that the sensor was activated. The door Data Type has two parameters: the door ID (of type UUID) and the status, a boolean indicating whether the door is currently open or closed.</span></p><h4 id="DoorMonitor-ApplicationLogic">Application Logic</h4><p>A simple application logic would be (pseudocode):</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="theme: Default; brush: cpp; gutter: false" style="font-size:12px;">proc init:
+	self.sensorsNearMe = {...}
+	self.usersWhoCanOpenMe = {...}
+	self.doorWriter = Qeo.createStateWriter(topic = org::qeo::sample::doorexample::Door)
+	self.sensorReader = Qeo.createEventReader(topic = org::qeo::sample::doorexample::DoorSensorActivation, onData = self.onDoorSensorActivation)
+
+proc onDoorSensorActivation(activation)
+	if activation.sensorID in self.sensorsNearMe:
+		if activation.user in self.usersWhoCanOpenMe:
+			self.open()
+			&lt;wait for person to pass through the door&gt;
+			self.close()
+proc open:
+	&lt;unlock hydraulics&gt;
+	&lt;open door&gt;
+	self.doorWriter.write({id = self.id, open = true})
+
+
+proc close:
+	&lt;close door&gt;
+	&lt;lock hydraulics&gt;
+	self.doorWriter.write({id = self.id, open = false})
+
+</pre>
+</div></div><p><span>Upon reception, the application reads the state of the door upon occurrence of a doorSensor event. Depending on that state, the hydraulics that keep the door closed are deactivated or activated. After that, the application also changes the State of the door to indicate the physical state of the door has changed.</span></p><p> </p><p> </p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676177/21958623.jpg">DoorMonitor.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676177/21958624.png">Door-Monitor-Artwork.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qeo Open Source Project Documentation : State versus Event</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="docindex.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Qeo-Open-Source-Project-Documentation_21675984.html">Qeo Open Source Project Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Developer-Documents_21676035.html">Developer Documents</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="21676165.html">Qeo Data Model (QDM) Developer Guide</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Best-Practices_21676166.html">Best Practices</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Qeo Open Source Project Documentation : State versus Event
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> lissensj</span> on May 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="StateversusEvent-StateversusEvent">State versus Event</h4><p>While designing your data model, you not only have to think about the actual structure of the data, but also about its<em> </em>semantics (behavior). Currently, Qeo offers two preconfigured behaviors for you to choose from: State and Event. For additional information on states and events, refer to <a href="Qeo-System-Description_21675993.html">System Description</a>.</p><h5 id="StateversusEvent-Example">Example</h5><p>A small example may illustrate best when to use <em>Events</em> versus <em>States</em>. Whether a door is open or closed, is definitely a State: any door is always either open or closed, so the property can be queried at any time. On the other hand, the fact that someone is passing through a door (cfr the optical sensors that ring a bell when you enter a shop) is an Event: it is a discrete spike, and the same condition (someone passing through the door) is no longer valid one moment earlier or later (i.e. before or after the person has passed through the door).</p><p>Another way to look at it is that Events are the derivative of State: whenever the number of people in a room (State) changes, that means someone passed through the room's door (Event).</p><h4 id="StateversusEvent-UseStateorEvent?">Use State or Event?</h4><p>In general, it is better to model data in the system as <em>State</em> instead of <em>Event</em>: in most cases, the subscribing application will want to build an internal model of the system's global state. By modeling data as State, Qeo will build this model on behalf of the application, whereas modeling data as Events (i.e. state transitions) forces the subscribing application to rebuild the state itself based on the events. In addition, the fact that late joiners are not supported by Events makes it hard to build a full model of the system's state: it is hard to apply deltas (Events) to a state if one does not know the initial state from which to start.</p><p>There are however some specific cases where Events may be more appropriate than State:</p><ul><li>Truly ephemeral events like keypresses</li><li>Fire-and-forget requests in the Directed State pattern (see below): while theoretically unclean, it is often pragmatic to use Events here.</li></ul><h5 id="StateversusEvent-Example.1">Example</h5><p>Consider a sliding door. We model this door with an <em>Event</em> called <em>doorSensorActivated</em>. Now consider a subscribing application, <em>Door</em> <em>Manipulator</em>,  that is a late joiner. The application can open or close the door when a hand is passed in front of a sensor. Depending on the state (open or closed), the door software will decide to open or close the door. Upon receiving the <em>doorSensorActivated</em> Event, Door Manipulator needs to know what the previous state of the door was in order to be able to take the appropriate action (i.e. <em>closeDoor</em> if the door was open, <em>openDoor</em> if the door was closed). Since it was a late joiner and does not know the initial state of the door, it cannot act accordingly.</p><p>Now consider the door modeled with a <em>State<strong> </strong></em>called <em>doorState</em>.  I has two possible values: <em>open</em> or <em>closed</em>. Consider the sensor modeled as event. When a hand is passed in front of the sensor, it triggers an event (<strong>doorSensoractivated</strong>). This event triggers <strong>Door Monitor</strong> to change the state of the door. For this, the door software listens to the value of <em>doorState</em>. If the value is <em>open</em>, it closes the door. If the value is <em>closed</em>, it opens the door. </p><p>For a more elaborate description of this example, go <a href="Door-Monitor_21676177.html">here</a>.</p><h4 id="StateversusEvent-RuleofThumbforStatesandEvents">Rule of Thumb for States and Events</h4><p>When in doubt, use <em>State</em>.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676167/21958619.jpg">2.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/21676167/21958620.jpg">1.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on May 26, 2014 09:36</p>
+                </section>
+            </div>
+        </div>     </body>
+</html>
